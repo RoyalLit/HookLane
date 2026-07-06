@@ -37,14 +37,16 @@ export default function SearchScreen() {
       <div style={{
         position: 'fixed',
         inset: 0,
+        width: '100%',
+        height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 30vh, rgba(0,0,0,0.3) 50vh, rgba(0,0,0,1) 80vh)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, transparent 30vh, rgba(0,0,0,0.3) 50vh, rgba(0,0,0,1) 80vh)',
+        maskImage: 'linear-gradient(to bottom, transparent 0vh, transparent 15vh, rgba(0,0,0,0.4) 40vh, rgba(0,0,0,0.8) 70vh, rgba(0,0,0,1) 100vh)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0vh, transparent 15vh, rgba(0,0,0,0.4) 40vh, rgba(0,0,0,0.8) 70vh, rgba(0,0,0,1) 100vh)',
       }}>
         <Grainient
-          color1="#FF6B35"
-          color2="#4a1f0a"
+          color1="#C85A2B"
+          color2="#2D1810"
           color3="#0A0A0B"
           timeSpeed={0.12}
           contrast={0.6}
