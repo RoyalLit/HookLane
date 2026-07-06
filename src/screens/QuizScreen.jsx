@@ -16,9 +16,13 @@ export default function QuizScreen() {
   const backBtnRef = useRef(null)
 
   useEffect(() => {
-    if (answered && nextBtnRef.current) {
-      nextBtnRef.current.focus()
-      nextBtnRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    if (answered) {
+      setTimeout(() => {
+        window.scrollTo({ 
+          top: document.documentElement.scrollHeight, 
+          behavior: 'smooth' 
+        })
+      }, 50)
     }
   }, [answered])
 
@@ -33,7 +37,7 @@ export default function QuizScreen() {
     setAnswered(false)
     setSelectedId(null)
     nextRound()
-    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [nextRound])
 
   const round = rounds[currentRound]
@@ -57,7 +61,7 @@ export default function QuizScreen() {
         alignItems: 'center',
         minHeight: '100dvh',
         overflowY: 'auto',
-        padding: '16px 12px 24px',
+        padding: '16px 12px 48px',
         gap: 12,
         maxWidth: 480,
         margin: '0 auto',
@@ -195,8 +199,9 @@ export default function QuizScreen() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 8,
-          minHeight: 76,
+          gap: 12,
+          marginTop: 16,
+          minHeight: 84,
           justifyContent: answered ? 'flex-start' : 'flex-end',
         }}
       >
