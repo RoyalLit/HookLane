@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "pushit": "git add . && git commit -m 'update' && git push origin main"
+    "pushit": "echo 'Use git add -p && git commit && git push instead'"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.2",

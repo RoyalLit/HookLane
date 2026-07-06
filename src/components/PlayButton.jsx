@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'react'
 
 const PREVIEW_DURATION = 10000
 
-export default function PlayButton({ previewUrl, autoPlay }) {
+export default function PlayButton({ previewUrl }) {
   const audioRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [audioFailed, setAudioFailed] = useState(false)
   const [hasPlayed, setHasPlayed] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [needsGesture, setNeedsGesture] = useState(true)
   const timerRef = useRef(null)
 
   useEffect(() => {
@@ -15,11 +16,6 @@ export default function PlayButton({ previewUrl, autoPlay }) {
     setAudioFailed(false)
     setHasPlayed(false)
     setLoading(false)
-    if (!previewUrl) return
-    if (autoPlay) {
-      const timer = setTimeout(() => playAudio(), 300)
-      return () => { clearTimeout(timer); clearTimer() }
-    }
   }, [previewUrl])
 
   function stopAudio() {
@@ -58,6 +54,7 @@ export default function PlayButton({ previewUrl, autoPlay }) {
   }
 
   function playAudio() {
+    setNeedsGesture(false)
     if (!previewUrl) return
     setAudioFailed(false)
     setHasPlayed(false)
@@ -91,60 +88,65 @@ export default function PlayButton({ previewUrl, autoPlay }) {
 
   const canPlay = !!previewUrl
 
-  const boxShadow = playing
-    ? '0 0 25px rgba(255,107,53,0.25)'
-    : '0 0 25px rgba(255,107,53,0.25)'
+  const boxShadow = '0 0 25px rgba(255,107,53,0.25)'
+
+  const showTapLabel = !playing && !loading && !audioFailed && needsGesture
 
   return (
-    <button
-      onClick={toggle}
-      disabled={!canPlay}
-      aria-label={audioFailed ? 'Audio unavailable' : playing ? 'Pause' : 'Play preview'}
-      aria-pressed={playing}
-      style={{
-        width: 56,
-        height: 56,
-        borderRadius: '50%',
-        border: `2px solid ${audioFailed ? 'var(--color-wrong)' : 'var(--color-accent)'}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#fff',
-        fontSize: 20,
-        cursor: canPlay ? 'pointer' : 'not-allowed',
-        opacity: canPlay ? 1 : 0.3,
-        transition: 'all 0.2s',
-        background: loading ? 'var(--color-surface-hover)' : playing ? 'transparent' : 'var(--color-accent)',
-        boxShadow,
-        outline: 'none',
-        fontFamily: 'var(--font-body)',
-        minWidth: 56,
-        minHeight: 56,
-      }}
-    >
-      {loading ? (
-        <div
-          style={{
-            width: 18,
-            height: 18,
-            border: '2px solid var(--color-muted)',
-            borderTopColor: '#fff',
-            borderRadius: '50%',
-            animation: 'spin 0.6s linear infinite',
-          }}
-        />
-      ) : audioFailed ? (
-        <span style={{ fontSize: 16, fontWeight: 700 }}>!</span>
-      ) : hasPlayed ? (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 12a9 9 0 1 1-9-9" />
-          <path d="M21 3v5h-5" />
-        </svg>
-      ) : playing ? (
-        <span style={{ fontSize: 16 }}>⏸</span>
-      ) : (
-        <span style={{ fontSize: 16, marginLeft: 2 }}>▶</span>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <button
+        onClick={toggle}
+        disabled={!canPlay}
+        aria-label={audioFailed ? 'Audio unavailable' : playing ? 'Pause' : 'Play preview'}
+        aria-pressed={playing}
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: '50%',
+          border: `2px solid ${audioFailed ? 'var(--color-wrong)' : 'var(--color-accent)'}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fff',
+          fontSize: 20,
+          cursor: canPlay ? 'pointer' : 'not-allowed',
+          opacity: canPlay ? 1 : 0.3,
+          transition: 'all 0.2s',
+          background: loading ? 'var(--color-surface-hover)' : playing ? 'transparent' : 'var(--color-accent)',
+          boxShadow,
+          outline: 'none',
+          fontFamily: 'var(--font-body)',
+          minWidth: 56,
+          minHeight: 56,
+        }}
+      >
+        {loading ? (
+          <div
+            style={{
+              width: 18,
+              height: 18,
+              border: '2px solid var(--color-muted)',
+              borderTopColor: '#fff',
+              borderRadius: '50%',
+              animation: 'spin 0.6s linear infinite',
+            }}
+          />
+        ) : audioFailed ? (
+          <span style={{ fontSize: 16, fontWeight: 700 }}>!</span>
+        ) : hasPlayed ? (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12a9 9 0 1 1-9-9" />
+            <path d="M21 3v5h-5" />
+          </svg>
+        ) : playing ? (
+          <span style={{ fontSize: 16 }}>⏸</span>
+        ) : (
+          <span style={{ fontSize: 16, marginLeft: 2 }}>▶</span>
+        )}
+      </button>
+      {showTapLabel && (
+        <span style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 6 }}>tap to play</span>
       )}
-    </button>
+    </div>
   )
 }

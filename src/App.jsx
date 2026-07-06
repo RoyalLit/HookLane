@@ -1,8 +1,11 @@
+import { lazy, Suspense } from 'react'
 import useStore from './store'
 import SearchScreen from './screens/SearchScreen'
-import QuizScreen from './screens/QuizScreen'
-import ScoreScreen from './screens/ScoreScreen'
+import ErrorBoundary from './components/ErrorBoundary'
 import ErrorToast from './components/ErrorToast'
+
+const QuizScreen = lazy(() => import('./screens/QuizScreen'))
+const ScoreScreen = lazy(() => import('./screens/ScoreScreen'))
 
 export default function App() {
   const screen = useStore((s) => s.screen)
@@ -14,9 +17,21 @@ export default function App() {
       case 'search':
         return <SearchScreen />
       case 'quiz':
-        return <QuizScreen />
+        return (
+          <ErrorBoundary>
+            <Suspense fallback={<div style={{minHeight:'100dvh'}} />}>
+              <QuizScreen />
+            </Suspense>
+          </ErrorBoundary>
+        )
       case 'score':
-        return <ScoreScreen />
+        return (
+          <ErrorBoundary>
+            <Suspense fallback={<div style={{minHeight:'100dvh'}} />}>
+              <ScoreScreen />
+            </Suspense>
+          </ErrorBoundary>
+        )
       default:
         return <SearchScreen />
     }
@@ -28,7 +43,6 @@ export default function App() {
       <ErrorToast message={toastMessage} onDismiss={clearToast} />
       <main
         id="main-content"
-        key={screen}
         style={{ animation: 'fadeIn 0.25s ease-out' }}
       >
         {renderScreen()}

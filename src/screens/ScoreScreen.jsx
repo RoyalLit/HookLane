@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import useStore from '../store'
 import StatBox from '../components/StatBox'
 import ShareCard from '../components/ShareCard'
@@ -67,6 +67,7 @@ export default function ScoreScreen() {
   const shareCardRef = useRef(null)
   const savedRef = useRef(false)
   const confettiPieces = useRef(createConfetti())
+  const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
     if (savedRef.current) return
@@ -241,7 +242,7 @@ export default function ScoreScreen() {
       }}
     >
       {/* Confetti */}
-      {isPerfect && (
+      {isPerfect && !shouldReduceMotion && (
         <div aria-hidden="true" style={{
           position: 'fixed',
           inset: 0,

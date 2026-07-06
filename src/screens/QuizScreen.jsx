@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import useStore from '../store'
 import QuizProgress from '../components/QuizProgress'
 import AlbumArt from '../components/AlbumArt'
@@ -8,6 +8,7 @@ import AnswerCard from '../components/AnswerCard'
 
 export default function QuizScreen() {
   const { rounds, currentRound, selectedArtist, score, totalRounds, answerQuestion, nextRound, exitQuiz } = useStore()
+  const shouldReduceMotion = useReducedMotion()
   const [answered, setAnswered] = useState(false)
   const [selectedId, setSelectedId] = useState(null)
   const [confirmExit, setConfirmExit] = useState(false)
@@ -18,11 +19,17 @@ export default function QuizScreen() {
   useEffect(() => {
     if (answered) {
       setTimeout(() => {
-        window.scrollTo({ 
-          top: document.documentElement.scrollHeight, 
-          behavior: 'smooth' 
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: shouldReduceMotion ? 'instant' : 'smooth',
         })
       }, 50)
+    }
+  }, [answered, shouldReduceMotion])
+
+  useEffect(() => {
+    if (answered && nextBtnRef.current) {
+      nextBtnRef.current.focus()
     }
   }, [answered])
 
@@ -37,8 +44,12 @@ export default function QuizScreen() {
     setAnswered(false)
     setSelectedId(null)
     nextRound()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [nextRound])
+    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'instant' : 'smooth' })
+    setTimeout(() => {
+      const playBtn = document.querySelector('button[aria-label="Play preview"]')
+      if (playBtn) playBtn.focus()
+    }, 100)
+  }, [nextRound, shouldReduceMotion])
 
   const round = rounds[currentRound]
   if (!round) return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>No round data</div>
@@ -193,6 +204,46 @@ export default function QuizScreen() {
         ))}
       </div>
 
+      {/* Skip button */}
+      {!answered && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: 8,
+        }}>
+          <button
+            onClick={() => {
+              setAnswered(true)
+              setSelectedId('skip')
+              answerQuestion('skip')
+            }}
+            aria-label="Skip this round"
+            style={{
+              padding: '10px 24px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--color-border)',
+              background: 'transparent',
+              color: 'var(--color-muted)',
+              fontSize: 12,
+              fontWeight: 600,
+              fontFamily: 'var(--font-body)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent)'
+              e.currentTarget.style.color = '#fff'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border)'
+              e.currentTarget.style.color = 'var(--color-muted)'
+            }}
+          >
+            I don't know — Skip
+          </button>
+        </div>
+      )}
+
       {/* Feedback + Next */}
       <div
         style={{
@@ -216,6 +267,10 @@ export default function QuizScreen() {
               {selectedId === correctTrack.id ? (
                 <span style={{ color: 'var(--color-correct)', fontWeight: 700, fontSize: 15 }}>
                   ✓ Correct!
+                </span>
+              ) : selectedId === 'skip' ? (
+                <span style={{ color: 'var(--color-muted)', fontWeight: 600, fontSize: 14 }}>
+                  ✗ {correctTrack.title} <span style={{fontSize: 11}}>(skipped)</span>
                 </span>
               ) : (
                 <span style={{ color: 'var(--color-wrong)', fontWeight: 600, fontSize: 14 }}>

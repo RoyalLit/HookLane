@@ -3,144 +3,102 @@
     <span style="color: #FF6B35">Hook</span><span style="color: #fff">lane</span>
   </h1>
   <p align="center">
-    <strong>Instant music quiz for any artist</strong><br>
-    Search → listen to 10-second previews → guess the song title → share your score
+    <strong>Prove your fandom. Guess the song.</strong><br>
+    Search any artist → listen to 10-second previews → guess the track → share your perfect score
   </p>
   <p>
     <a href="#features">Features</a> •
-    <a href="#getting-started">Getting Started</a> •
+    <a href="#quick-start">Quick Start</a> •
+    <a href="#how-it-works">How It Works</a> •
     <a href="#architecture">Architecture</a> •
-    <a href="#deployment">Deployment</a> •
-    <a href="#contributing">Contributing</a>
+    <a href="#deployment">Deployment</a>
   </p>
   <p>
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" />
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs Welcome" />
+    <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19" />
+    <img src="https://img.shields.io/badge/Vite-8-646cff?logo=vite" alt="Vite" />
   </p>
 </div>
 
-## Overview
+## Why This Exists
 
-Hooklane is a browser-based music quiz game. Pick any artist, listen to 10-second song previews, and guess the correct title from four options. No account required — play instantly, share your score as a beautiful image card.
-
-Built with React + Vite, powered by Deezer and iTunes APIs via a Cloudflare Worker proxy.
+Music quizzes are often restricted to preset playlists, require clunky logins, or are heavily rate-limited by strict API terms (like Spotify's). Hooklane solves this by creatively combining the **Deezer API** for fast artist searching with the **iTunes Search API** for restriction-free 10-second audio previews. The result is a lightning-fast, login-free quiz for *any* artist on earth.
 
 ## Features
 
-- **Artist search**: Search any artist; Deezer returns results with album art
-- **Adaptive quiz**: 5–10 rounds per game, answers sorted by track popularity
-- **10-second previews**: Stream from iTunes; replay button after preview ends
-- **Score card**: Animated 3D shareable card with score, percentage, and artist art
-- **Share anywhere**: Download PNG or share directly to WhatsApp, Instagram, etc.
-- **No login**: Full gameplay as guest; optional account mode (coming soon)
-- **Dark theme**: #0A0A0B base with #FF6B35 orange accent
+- 🔎 **Universal Search**: Search any artist globally.
+- 🎵 **10-Second Previews**: High-quality audio streams directly from iTunes.
+- 🧠 **Adaptive Difficulty**: Tracks are grouped by popularity. You'll get a mix of massive hits and deep cuts over 5-10 rounds.
+- 🃏 **Premium Share Cards**: Generate a beautiful, tilt-interactive 3D score card that you can download as a PNG or share directly to social media.
+- 📱 **Mobile-First Design**: Optimized touch targets, dynamic grid layouts, and glassmorphism UI that feels like a native app.
+- ⚡ **Zero Backend**: Fully static frontend utilizing edge-proxied API routes.
 
-## Getting Started
+## Quick Start
 
-### Prerequisites
+Get a local instance running in under 2 minutes.
 
-- Node.js >= 20
-- npm >= 10
-
-### Install & Dev
+**Prerequisites**: Node.js 20+, npm 10+
 
 ```bash
-git clone <repo-url>
-cd hooklane
+git clone https://github.com/RoyalLit/HookLane.git
+cd HookLane
 npm install
 npm run dev
 ```
 
-Opens at `http://localhost:5173`. API calls to Deezer / iTunes are proxied via Vite dev server.
+Visit `http://localhost:5173`. 
+> **Note**: API calls to Deezer and iTunes are automatically proxied via the Vite dev server to bypass CORS.
 
-### Build
+## How It Works
 
-```bash
-npm run build
-npm run preview
-```
+1. **Search**: User types an artist name. Hooklane queries the Deezer API (`/search/artist`) and returns the closest matches with high-res album art.
+2. **Generate**: We query the iTunes API (`attribute=artistTerm`) to pull up to 40 tracks for the artist. The tracks are split into difficulty tiers (easy/medium/hard) based on popularity and shuffled to create a dynamic 5–10 round quiz.
+3. **Play**: Each round plays a 10-second audio clip. The user must identify the song from 4 multiple-choice options.
+4. **Share**: At the end of the quiz, Hooklane renders an interactive, 3D `ProfileCard` using Framer Motion and generates a downloadable PNG of the user's score.
 
-## Architecture
+## Architecture & Tech Stack
 
-```
-hooklane/
-├── src/
-│   ├── screens/       — SearchScreen, QuizScreen, ScoreScreen
-│   ├── components/    — Reusable UI (Hero, Grainient, ProfileCard, etc.)
-│   ├── lib/           — api.js, quizGenerator.js, storage.js
-│   └── main.jsx       — Entry point
-├── worker/
-│   └── index.js       — Cloudflare Worker (API proxy + rate limiter)
-├── public/            — Static assets
-└── vite.config.js     — Dev server + proxy config
-```
-
-### Data Flow
-
-1. **Search**: User types artist name → Deezer `/search/artist` → results list
-2. **Quiz**: Select artist → iTunes Search API (`attribute=artistTerm`) → 40 tracks → tertile-split into easy/medium/hard → shuffle → 5–10 rounds
-3. **Play**: Each round shows album art + plays 10s iTunes preview → pick correct title from 4 options
-4. **Score**: Results screen → animated ProfileCard → share as PNG
-
-### APIs
-
-- **Deezer Search API**: Artist search only. Album/top endpoints are region-blocked.
-- **iTunes Search API**: Primary track source. Album art via URL transformation.
-- **Cloudflare Worker**: `/api/deezer/*`, `/api/itunes/*` — CORS proxy + 50 req/min rate limit.
-
-## Tech Stack
+Hooklane is built for maximum speed and zero operational overhead.
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | React 19, Vite 8 |
-| State | Zustand |
-| Animation | Motion (motion.dev) |
-| Styling | Tailwind CSS v4 |
-| 3D Effects | OGL (WebGL shaders) |
-| Routing | State-driven (no URL router) |
-| Worker | Cloudflare Workers |
-| CI | GitHub Actions |
-| Lint | Oxlint |
+| **Framework** | React 19, Vite 8 |
+| **State** | Zustand |
+| **Styling** | Tailwind CSS v4 + Vanilla CSS Modules |
+| **Animation** | Motion (`motion/react`) |
+| **Audio/Data**| iTunes Search API, Deezer API |
+| **Proxy** | Vercel Edge Rewrites (`vercel.json`) |
 
-## Configuration
-
-Environment variables (`.dev.vars` for local worker dev):
-
-```env
-# No secrets required for Deezer Simple API
-# Add worker environment variables as needed
+### Project Structure
+```text
+hooklane/
+├── src/
+│   ├── screens/       # SearchScreen, QuizScreen, ScoreScreen
+│   ├── components/    # Reusable UI (HooklaneHero, ShareCard, ProfileCard)
+│   ├── lib/           # api.js, quizGenerator.js, storage.js
+│   ├── store.js       # Zustand global state
+│   └── main.jsx       # Entry point
+├── vercel.json        # Production API proxy rules
+└── vite.config.js     # Dev server & local proxy config
 ```
 
 ## Deployment
 
-### Cloudflare Pages + Worker
+Hooklane is designed to be deployed seamlessly on **Vercel**. It uses Vercel's built-in `rewrites` to proxy external APIs without requiring a custom Node.js backend or Cloudflare Worker.
 
 ```bash
 npm run build
-# Deploy dist/ to Cloudflare Pages
-# Deploy worker/ to Cloudflare Workers
 ```
 
-The worker handles API proxying and CORS. Ensure your Pages domain is in the worker's CORS allowlist.
-
-## Testing
-
-```bash
-npm test
-```
-
-Uses Vitest. Tests cover quiz generation logic and API integration.
+Deploying to Vercel:
+1. Connect your GitHub repository to Vercel.
+2. Vercel will automatically detect the Vite preset and run `npm run build`.
+3. The `vercel.json` file automatically configures the API proxy rewrites for Deezer and iTunes to avoid CORS issues in production.
 
 ## Contributing
 
-PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We love contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
-MIT
-
----
-
-<div align="center">
-  <sub>Built by <a href="https://hooklane.pages.dev">Hooklane</a></sub>
-</div>
+MIT © [Pahul](https://github.com/RoyalLit)

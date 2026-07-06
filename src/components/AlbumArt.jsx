@@ -34,6 +34,7 @@ export default function AlbumArt({ src, alt, size = 260 }) {
         src={src}
         alt={alt}
         onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
         style={{
           width: '100%',
           height: '100%',
