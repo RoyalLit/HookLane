@@ -4,34 +4,17 @@ const BACKENDS = {
   itunesrss: 'https://rss.applemarketingtools.com',
 }
 
-const RATE_LIMIT = 50
-const RATE_WINDOW_MS = 60_000
-const requestCounts = new Map()
+const CORS_PROXY = 'https://corsproxy.io/?'
+const CORS_PROXY_FAILOVER = 'https://api.allorigins.win/raw?url='
 
-function rateLimited(ip) {
-  const now = Date.now()
-  const entry = requestCounts.get(ip)
-  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
-    requestCounts.set(ip, { count: 1, windowStart: now })
-    cleanupStaleEntries(now)
-    return false
-  }
-  entry.count += 1
-  if (entry.count > RATE_LIMIT) return true
-  return false
-}
-
-function cleanupStaleEntries(now) {
-  for (const [ip, entry] of requestCounts) {
-    if (now - entry.windowStart > RATE_WINDOW_MS) requestCounts.delete(ip)
-  }
+function buildUrl(backend, path, search) {
+  return `${BACKENDS[backend]}${path || '/'}${search}`
 }
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url)
 
-    // Only handle API — let Cloudflare serve static assets for everything else
     if (!url.pathname.startsWith('/api/')) return
 
     if (request.method === 'OPTIONS') {
@@ -43,18 +26,39 @@ export default {
       return new Response('Not found', { status: 404 })
     }
 
-    const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown'
-    if (rateLimited(clientIp)) {
-      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), { status: 429 })
-    }
+    const backend = match[1]
+    const path = match[2]
+    const target = buildUrl(backend, path, url.search)
 
-    const target = `${BACKENDS[match[1]]}${match[2] || '/'}${url.search}`
-
+    // Try direct fetch first
     let response
     try {
-      response = await fetch(target, { headers: { Accept: 'application/json' } })
+      response = await fetch(target, {
+        headers: { Accept: 'application/json', 'User-Agent': 'Hooklane/1.0' },
+      })
     } catch (err) {
       return new Response(JSON.stringify({ error: 'Upstream request failed' }), { status: 502 })
+    }
+
+    // If upstream returns error, try via CORS proxy fallback
+    if (!response.ok) {
+      let proxyUrl = CORS_PROXY + encodeURIComponent(target)
+      let proxyRes
+      try {
+        proxyRes = await fetch(proxyUrl, { headers: { Accept: 'application/json' } })
+      } catch {
+        // Try failover proxy
+        proxyUrl = CORS_PROXY_FAILOVER + encodeURIComponent(target)
+        try {
+          proxyRes = await fetch(proxyUrl, { headers: { Accept: 'application/json' } })
+        } catch {
+          // Return original error if both proxies fail
+          const body = await response.text()
+          return new Response(body, { status: response.status })
+        }
+      }
+      const body = await proxyRes.text()
+      return new Response(body, { status: proxyRes.ok ? 200 : response.status })
     }
 
     const body = await response.text()
