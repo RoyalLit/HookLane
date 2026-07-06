@@ -42,8 +42,6 @@ export default function HowItWorks() {
         position: 'absolute',
         inset: 0,
         background: 'rgba(10,10,11,0.5)',
-        WebkitBackdropFilter: 'blur(12px)',
-        backdropFilter: 'blur(12px)',
         maskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
         WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
         zIndex: -1

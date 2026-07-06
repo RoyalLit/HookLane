@@ -33,33 +33,38 @@ export default function SearchScreen() {
   }
 
   return (
-    <>
+    <div style={{ position: 'relative', width: '100%', overflowX: 'hidden' }}>
       <div style={{
-        position: 'fixed',
+        position: 'absolute',
         inset: 0,
-        width: '100%',
-        height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        maskImage: 'linear-gradient(to bottom, transparent 0vh, transparent 15vh, rgba(0,0,0,0.4) 40vh, rgba(0,0,0,0.8) 70vh, rgba(0,0,0,1) 100vh)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0vh, transparent 15vh, rgba(0,0,0,0.4) 40vh, rgba(0,0,0,0.8) 70vh, rgba(0,0,0,1) 100vh)',
       }}>
-        <Grainient
-          color1="#C85A2B"
-          color2="#2D1810"
-          color3="#0A0A0B"
-          timeSpeed={0.12}
-          contrast={0.6}
-          saturation={0.4}
-          grainAmount={0.02}
-          warpStrength={0.3}
-          warpFrequency={3}
-          blendAngle={25}
-          blendSoftness={0.25}
-          rotationAmount={250}
-          noiseScale={1.2}
-          zoom={1.1}
-        />
+        {/* Grainient with fade mask so it only appears below Hero */}
+        <div style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          opacity: 0.5,
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+        }}>
+          <Grainient
+            color1="#8A3B1C"
+            color2="#4A1F0D"
+            color3="#0A0A0B"
+            timeSpeed={0.04}
+            contrast={1.0}
+            saturation={0.8}
+            grainAmount={0.03}
+            warpStrength={1.5}
+            warpFrequency={1.5}
+            blendAngle={45}
+            blendSoftness={1.5}
+            rotationAmount={150}
+            noiseScale={1.8}
+            zoom={1.5}
+          />
+        </div>
       </div>
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
         <HooklaneHero onSelectArtist={handleSelectArtist} />
@@ -69,6 +74,6 @@ export default function SearchScreen() {
         <LeaderboardPreview />
         <Footer />
       </div>
-    </>
+    </div>
   )
 }

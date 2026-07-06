@@ -173,6 +173,7 @@ export default function HooklaneHero({ onSelectArtist }) {
   const [searching, setSearching] = useState(false)
   const [searched, setSearched] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const { setToast } = useStore()
   const searchInputRef = useRef(null)
   const abortRef = useRef(null)
@@ -183,7 +184,15 @@ export default function HooklaneHero({ onSelectArtist }) {
     setReducedMotion(mq.matches)
     const handler = (e) => setReducedMotion(e.matches)
     mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
+
+    const resizeHandler = () => setIsMobile(window.innerWidth <= 768)
+    resizeHandler()
+    window.addEventListener('resize', resizeHandler)
+
+    return () => {
+      mq.removeEventListener('change', handler)
+      window.removeEventListener('resize', resizeHandler)
+    }
   }, [])
 
   // Auto-search on typing with debounce
@@ -229,7 +238,7 @@ export default function HooklaneHero({ onSelectArtist }) {
     onSelectArtist(artist)
   }
 
-  const vinyls = generateVinyls()
+  const vinyls = generateVinyls(isMobile)
 
   return (
     <section
@@ -244,7 +253,9 @@ export default function HooklaneHero({ onSelectArtist }) {
         justifyContent: 'center',
         padding: '0 16px',
         overflow: 'hidden',
-        background: 'linear-gradient(to bottom, var(--color-bg) 0%, var(--color-bg) 80%, transparent 100%)',
+        background: 'transparent',
+        maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
       }}
     >
       {/* Vinyl records */}

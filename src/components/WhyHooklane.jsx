@@ -42,7 +42,7 @@ const features = [
 
 export default function WhyHooklane() {
   return (
-    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.4)', WebkitBackdropFilter: 'blur(12px)', backdropFilter: 'blur(12px)' }}>
+    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.4)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <FadeIn>
           <h2 style={{

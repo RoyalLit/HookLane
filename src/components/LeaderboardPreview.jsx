@@ -3,7 +3,7 @@ import StarBorder from './ui/StarBorder'
 
 export default function LeaderboardPreview() {
   return (
-    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.2)', WebkitBackdropFilter: 'blur(12px)', backdropFilter: 'blur(12px)' }}>
+    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.2)' }}>
       <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <FadeIn direction="left" scale>
           <h2 style={{

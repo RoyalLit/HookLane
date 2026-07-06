@@ -47,7 +47,7 @@ export default function TrendingNow({ onSelectArtist }) {
   if (loading || artists.length === 0) return null
 
   return (
-    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.3)', WebkitBackdropFilter: 'blur(12px)', backdropFilter: 'blur(12px)' }}>
+    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.3)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
         <FadeIn direction="right">
           <h2 style={{
