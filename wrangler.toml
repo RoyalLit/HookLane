@@ -1,6 +1,3 @@
-name = "hooklane-api"
-main = "worker/index.js"
+name = "hooklane"
 compatibility_date = "2026-07-03"
-
-[env.production]
-workers_dev = true
+pages_build_output_dir = "dist"
