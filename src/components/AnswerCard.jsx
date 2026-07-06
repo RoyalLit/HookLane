@@ -45,8 +45,8 @@ export default function AnswerCard({ track, state, onSelect, index }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 6,
-        padding: 8,
+        gap: 8,
+        padding: 10,
         borderRadius: 'var(--radius-lg)',
         border: '1px solid',
         borderColor,
@@ -55,13 +55,15 @@ export default function AnswerCard({ track, state, onSelect, index }) {
         cursor: isDefault ? 'pointer' : 'default',
         transition: 'all 0.15s ease',
         width: '100%',
-        minHeight: 0,
+        height: '100%',
         boxSizing: 'border-box',
         fontFamily: 'var(--font-body)',
         boxShadow,
         transform,
         animation: isDefault ? `fadeIn 0.3s ease-out ${(index || 0) * 0.08}s both` : 'none',
         outline: 'none',
+        WebkitAppearance: 'none',
+        margin: 0,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

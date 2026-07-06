@@ -363,10 +363,8 @@
 }
 
 .pc-wordmark {
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
+  margin: 0 auto 8px auto;
   font-family: var(--font-display, 'Inter, system-ui, sans-serif');
   font-weight: 800;
   font-size: min(2.5svh, 16px);
@@ -440,8 +438,8 @@
   }
 
   .pc-wordmark {
-    top: 12px;
     font-size: min(2svh, 12px);
+    margin: 0 auto 4px auto;
   }
 
   .pc-details h3 {
