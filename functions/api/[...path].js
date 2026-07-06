@@ -1,3 +1,5 @@
+// Same-origin requests (prod) skip Origin header entirely — no CORS needed.
+// Dev servers listed here need explicit CORS headers:
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:4173',
