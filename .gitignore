@@ -58,3 +58,5 @@ DESIGN.md
 HOOKLANE_MASTER_PLAN.md
 REDESIGN_SPEC.md
 *.md.original
+.vercel
+.env*

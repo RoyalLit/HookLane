@@ -1,4 +1,18 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/deezer/:match*",
+      "destination": "https://api.deezer.com/:match*"
+    },
+    {
+      "source": "/api/itunes/:match*",
+      "destination": "https://itunes.apple.com/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
