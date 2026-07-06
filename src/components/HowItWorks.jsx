@@ -37,8 +37,18 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.5)', WebkitBackdropFilter: 'blur(12px)', backdropFilter: 'blur(12px)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+    <section style={{ position: 'relative', padding: '96px 16px' }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(10,10,11,0.5)',
+        WebkitBackdropFilter: 'blur(12px)',
+        backdropFilter: 'blur(12px)',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
+        zIndex: -1
+      }} />
+      <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <FadeIn direction="left">
           <h2 style={{
             fontSize: 'clamp(28px, 5vw, 48px)',

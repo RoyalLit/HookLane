@@ -11,6 +11,7 @@ export default function QuizScreen() {
   const [answered, setAnswered] = useState(false)
   const [selectedId, setSelectedId] = useState(null)
   const [confirmExit, setConfirmExit] = useState(false)
+  const containerRef = useRef(null)
   const nextBtnRef = useRef(null)
   const backBtnRef = useRef(null)
 
@@ -32,6 +33,7 @@ export default function QuizScreen() {
     setAnswered(false)
     setSelectedId(null)
     nextRound()
+    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [nextRound])
 
   const round = rounds[currentRound]
@@ -48,6 +50,7 @@ export default function QuizScreen() {
 
   return (
     <div
+      ref={containerRef}
       style={{
         display: 'flex',
         flexDirection: 'column',

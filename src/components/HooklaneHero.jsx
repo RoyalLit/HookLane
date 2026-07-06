@@ -244,7 +244,7 @@ export default function HooklaneHero({ onSelectArtist }) {
         justifyContent: 'center',
         padding: '0 16px',
         overflow: 'hidden',
-        background: 'var(--color-bg)',
+        background: 'linear-gradient(to bottom, var(--color-bg) 0%, var(--color-bg) 80%, transparent 100%)',
       }}
     >
       {/* Vinyl records */}
@@ -345,8 +345,10 @@ export default function HooklaneHero({ onSelectArtist }) {
           <span style={{ color: '#fff' }}>lane</span>
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <button
+          <motion.button
             onClick={handleSignIn}
+            whileHover={{ scale: 1.05, color: '#fff' }}
+            whileTap={{ scale: 0.95 }}
             style={{
               background: 'transparent',
               border: 'none',
@@ -354,25 +356,28 @@ export default function HooklaneHero({ onSelectArtist }) {
               fontSize: 14,
               fontFamily: 'var(--font-body)',
               cursor: 'pointer',
-              transition: 'color 0.2s',
               padding: '8px 4px',
               minHeight: 44,
             }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
-            onMouseLeave={(e) => e.currentTarget.style.color = muted}
           >
             Sign In
-          </button>
-          <StarBorder
-            as="button"
-            onClick={handlePlayNow}
-            color="#FF6B35"
-            speed="8s"
-            thickness={1}
-            style={{ fontSize: 14 }}
+          </motion.button>
+          <motion.div
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            style={{ display: 'inline-flex' }}
           >
-            Play Now
-          </StarBorder>
+            <StarBorder
+              as="button"
+              onClick={handlePlayNow}
+              color="#FF6B35"
+              speed="8s"
+              thickness={1}
+              style={{ fontSize: 14 }}
+            >
+              Play Now
+            </StarBorder>
+          </motion.div>
         </div>
       </nav>
 
@@ -506,9 +511,11 @@ export default function HooklaneHero({ onSelectArtist }) {
                 }}
               >
                 {results.slice(0, 5).map((artist, idx) => (
-                  <button
+                  <motion.button
                     key={artist.id}
                     onClick={() => handleSelect(artist)}
+                    whileHover={{ background: surfaceHover }}
+                    whileTap={{ scale: 0.98 }}
                     style={{
                       display: 'flex',
                       width: '100%',
@@ -522,12 +529,9 @@ export default function HooklaneHero({ onSelectArtist }) {
                       border: 'none',
                       borderTop: idx > 0 ? '1px solid var(--color-border)' : 'none',
                       cursor: 'pointer',
-                      transition: 'background 0.15s',
                       fontFamily: 'var(--font-body)',
                       minHeight: 44,
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = surfaceHover}
-                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
                     {artist.picture_small ? (
                       <img
@@ -572,7 +576,7 @@ export default function HooklaneHero({ onSelectArtist }) {
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </button>
+                    </motion.button>
                 ))}
               </motion.div>
             )}
@@ -588,20 +592,7 @@ export default function HooklaneHero({ onSelectArtist }) {
         )}
       </div>
 
-      {/* Bottom gradient fade for smooth transition */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 240,
-          background: 'linear-gradient(to top, var(--color-bg) 0%, transparent 100%)',
-          pointerEvents: 'none',
-          zIndex: 3,
-        }}
-      />
+
 
       {/* Scroll hint */}
       <div
