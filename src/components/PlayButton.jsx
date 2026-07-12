@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 
 const PREVIEW_DURATION = 10000
 
-export default function PlayButton({ previewUrl }) {
+export default function PlayButton({ previewUrl, autoPlay }) {
   const audioRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [audioFailed, setAudioFailed] = useState(false)
@@ -16,7 +16,15 @@ export default function PlayButton({ previewUrl }) {
     setAudioFailed(false)
     setHasPlayed(false)
     setLoading(false)
-  }, [previewUrl])
+    
+    if (autoPlay && previewUrl) {
+      // Small timeout to let the UI transition finish before blasting audio
+      const t = setTimeout(() => {
+        playAudio()
+      }, 400)
+      return () => clearTimeout(t)
+    }
+  }, [previewUrl, autoPlay])
 
   function stopAudio() {
     clearTimer()
