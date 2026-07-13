@@ -47,10 +47,7 @@ const steps = [
 export default function HowItWorks() {
   return (
     <section className="relative py-24 px-4">
-      <div className="absolute inset-0 bg-[rgba(10,10,11,0.5)] z-[-1]" style={{
-        maskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 150px)',
-      }} />
+      <div className="absolute inset-0 bg-[rgba(10,10,11,0.5)] z-[-1] [mask-image:linear-gradient(to_bottom,transparent_0%,black_150px)] [&::-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_150px)]" />
       <div className="mx-auto max-w-[1280px] relative z-10">
         <FadeIn direction="left">
           <h2 className="font-display font-extrabold text-[clamp(28px,5vw,48px)] text-center text-white mb-3">

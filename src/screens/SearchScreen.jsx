@@ -131,10 +131,7 @@ export default function SearchScreen() {
     <div className="relative w-full">
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Grainient with fade mask so it only appears below Hero */}
-        <div className="absolute inset-0 opacity-50" style={{
-          maskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-        }}>
+        <div className="absolute inset-0 opacity-50 [mask-image:linear-gradient(to_bottom,transparent_0%,black_25%)] [&::-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_25%)]">
           <Grainient
             color1="#8A3B1C"
             color2="#4A1F0D"
