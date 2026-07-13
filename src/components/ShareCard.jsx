@@ -50,7 +50,6 @@ function drawCircularImage(ctx, img, cx, cy, r) {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2)
   }
   ctx.restore()
-  // border
   ctx.beginPath()
   ctx.arc(cx, cy, r, 0, Math.PI * 2)
   ctx.strokeStyle = BORDER
@@ -80,9 +79,9 @@ function drawAlbumCover(ctx, img, x, y, size) {
 
 const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedArtist, rounds, difficulty }, ref) {
   const DIFFICULTY_MAP = {
-    easy:   { emoji: '🟢', label: 'EASY' },
-    medium: { emoji: '🟡', label: 'MEDIUM' },
-    hard:   { emoji: '🔴', label: 'HARD' },
+    easy: { label: 'EASY' },
+    medium: { label: 'MEDIUM' },
+    hard: { label: 'HARD' },
   }
   const diff = DIFFICULTY_MAP[difficulty] || DIFFICULTY_MAP.medium
   const canvasRef = useRef(null)
@@ -125,55 +124,54 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
         ),
       )
 
-      // fill missing slots with null
       while (albumImgs.length < 4) albumImgs.push(null)
 
-      // --- circular portrait ---
+      // circular portrait
       const portraitR = 115
       const portraitCy = 175
       drawCircularImage(ctx, portraitImg, SIZE / 2, portraitCy, portraitR)
 
-      // --- artist name ---
+      // artist name
       const artistName = selectedArtist?.name || 'Artist'
       ctx.fillStyle = '#FFFFFF'
-      ctx.font = 'bold 36px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 36px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
       const nameY = portraitCy + portraitR + 28
       ctx.fillText(artistName, SIZE / 2, nameY)
 
-      // --- score: "7 / 10" ---
+      // score
       const scoreY = nameY + 44 + 24
       const pct = totalRounds > 0 ? Math.round((score / totalRounds) * 100) : 0
 
-      ctx.font = 'bold 96px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 96px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
 
       const scoreStr = String(score)
       const scoreW = ctx.measureText(scoreStr).width
       const totalStr = ` / ${totalRounds}`
-      ctx.font = '52px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = '52px "JetBrains Mono", monospace'
       const totalW = ctx.measureText(totalStr).width
       const fullW = scoreW + totalW
       const scoreX = (SIZE - fullW) / 2
 
-      ctx.font = 'bold 96px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 96px "JetBrains Mono", monospace'
       ctx.fillStyle = '#FFFFFF'
       ctx.fillText(scoreStr, scoreX, scoreY)
 
-      ctx.font = '52px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = '52px "JetBrains Mono", monospace'
       ctx.fillStyle = MUTED
       ctx.fillText(totalStr, scoreX + scoreW, scoreY + 18)
 
-      // --- percentage ---
+      // percentage
       ctx.fillStyle = ACCENT
-      ctx.font = 'bold 32px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 32px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
       ctx.fillText(`${pct}%`, SIZE / 2, scoreY + 110)
 
-      // --- album grid 2x2 ---
+      // album grid 2x2
       const albumSize = 210
       const gap = 20
       const gridW = albumSize * 2 + gap
@@ -188,17 +186,19 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
         drawAlbumCover(ctx, albumImgs[i], x, y, albumSize)
       }
 
-      // --- difficulty badge ---
+      // difficulty badge
       const diffBadgeY = scoreY + 118
       const diffText = `${diff.label}`
-      ctx.font = 'bold 22px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 22px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       const badgeW = ctx.measureText(diffText).width + 36
       const badgeH = 36
       const badgeBx = SIZE / 2 - badgeW / 2
+
       const badgeBg = difficulty === 'hard' ? 'rgba(239,68,68,0.15)' : difficulty === 'easy' ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)'
       const badgeBorder = difficulty === 'hard' ? '#EF4444' : difficulty === 'easy' ? '#22C55E' : '#EAB308'
+
       roundRect(ctx, badgeBx, diffBadgeY, badgeW, badgeH, 8)
       ctx.fillStyle = badgeBg
       ctx.fill()
@@ -208,9 +208,9 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       ctx.fillStyle = badgeBorder
       ctx.fillText(diffText, SIZE / 2, diffBadgeY + badgeH / 2)
 
-      // --- Hooklane wordmark ---
+      // Hooklane wordmark
       const wmY = SIZE - 90
-      ctx.font = 'bold 44px Inter, system-ui, -apple-system, sans-serif'
+      ctx.font = 'bold 44px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
 
@@ -225,8 +225,8 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       ctx.fillStyle = '#FFFFFF'
       ctx.fillText(laneTxt, wmX + hookW, wmY)
 
-      // --- site URL ---
-      ctx.font = '22px Inter, system-ui, -apple-system, sans-serif'
+      // site URL
+      ctx.font = '22px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
       ctx.fillStyle = MUTED
@@ -255,46 +255,27 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
 
   useImperativeHandle(ref, () => ({ generate }))
 
-  // auto-generate on mount
   useEffect(() => {
     generate()
   }, [generate])
 
-  const _handleDownload = useCallback(async () => {
-    const blob = await generate()
-    if (!blob) return
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `hooklane-${(selectedArtist?.name || 'artist').replace(/\s+/g, '-').toLowerCase()}-${score}-${totalRounds}.png`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }, [generate, selectedArtist, score, totalRounds])
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+    <div className="flex flex-col items-center gap-2">
       <canvas
         ref={previewCanvasRef}
         width={PREVIEW_SIZE}
         height={PREVIEW_SIZE}
         role="img"
         aria-label={`Quiz score: ${score}/${totalRounds} for ${selectedArtist?.name || 'artist'}`}
-        style={{
-          width: PREVIEW_SIZE,
-          height: PREVIEW_SIZE,
-          borderRadius: 8,
-          border: '1px solid var(--border)',
-          display: 'block',
-        }}
+        className="rounded-md border border-[var(--color-border)] block"
+        style={{ width: PREVIEW_SIZE, height: PREVIEW_SIZE }}
       />
       <canvas ref={canvasRef} style={{ display: 'none' }} />
       {!generated && !generating && (
-        <div style={{ color: 'var(--muted)', fontSize: 12 }}>Preview generating...</div>
+        <div className="text-[12px]" style={{ color: 'var(--color-muted)' }}>Preview generating...</div>
       )}
       {generating && (
-        <div style={{ color: 'var(--muted)', fontSize: 12 }}>Generating...</div>
+        <div className="text-[12px]" style={{ color: 'var(--color-muted)' }}>Generating...</div>
       )}
     </div>
   )

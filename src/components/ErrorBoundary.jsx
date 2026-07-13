@@ -13,40 +13,20 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100dvh',
-          padding: 40,
-          gap: 16,
-          textAlign: 'center',
-          color: '#fff',
-          fontFamily: 'var(--font-body)',
-        }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>⚠</div>
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Something went wrong</h1>
-          <p style={{ fontSize: 13, color: 'var(--color-muted)', margin: 0 }}>
-            {this.state.error?.message || 'An unexpected error occurred'}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: '12px 24px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--color-accent)',
-              color: '#fff',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: 13,
-              fontWeight: 700,
-              fontFamily: 'var(--font-body)',
-              marginTop: 8,
-            }}
-          >
-            Reload
-          </button>
+        <div className="min-h-[100dvh] flex items-center justify-center p-4 bg-[var(--color-bg)]">
+          <div className="max-w-md w-full rounded-[var(--radius-lg)] bg-[var(--color-surface)]/90 backdrop-blur-xl border border-[var(--color-border)] p-8 text-center">
+            <div className="text-6xl mb-4" role="img" aria-label="Warning">⚠</div>
+            <h1 className="font-display font-bold text-xl text-white mb-2">Something went wrong</h1>
+            <p className="text-[var(--color-muted)] text-sm mb-6 font-body">
+              {this.state.error?.message || 'An unexpected error occurred'}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-white border-0 cursor-pointer text-sm font-bold font-[var(--font-body)]"
+            >
+              Reload
+            </button>
+          </div>
         </div>
       )
     }
