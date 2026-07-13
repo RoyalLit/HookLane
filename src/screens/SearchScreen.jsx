@@ -11,7 +11,8 @@ import Footer from '../components/Footer'
 import Grainient from '../components/Grainient'
 
 export default function SearchScreen() {
-  const { setQuizLoading, setToast, startQuiz, quizLoading } = useStore()
+  const { setQuizLoading, setToast, startQuiz, quizLoading, difficulty, setDifficulty } = useStore()
+  const [pendingArtist, setPendingArtist] = useState(null)
   const [loadingTimedOut, setLoadingTimedOut] = useState(false)
   const loadingTimeoutRef = useRef(null)
 
@@ -30,21 +31,27 @@ export default function SearchScreen() {
     }
   }, [quizLoading])
 
-  const handleSelectArtist = async (artist) => {
+  const handleSelectArtist = async (artist, chosenDifficulty) => {
+    const diff = chosenDifficulty || difficulty
     setLoadingTimedOut(false)
     setQuizLoading(true)
+    setDifficulty(diff)
     try {
-      const rounds = await generateRounds(artist.name)
+      const rounds = await generateRounds(artist.name, diff)
       if (rounds.length < 1) {
         setQuizLoading(false)
         setToast('No songs found for this artist. Try another.')
         return
       }
-      startQuiz(artist, [], rounds)
+      startQuiz(artist, [], rounds, diff)
     } catch (err) {
       setQuizLoading(false)
       setToast(err.message || 'Failed to load tracks. Try another artist.')
     }
+  }
+
+  const handleArtistPick = (artist) => {
+    setPendingArtist(artist)
   }
 
   if (quizLoading) {
@@ -102,6 +109,107 @@ export default function SearchScreen() {
     )
   }
 
+  // Difficulty picker modal
+  if (pendingArtist) {
+    const LEVELS = [
+      {
+        id: 'easy',
+        label: 'Easy',
+        emoji: '🟢',
+        desc: 'Top hits only · Unlimited replays · 10s clip',
+      },
+      {
+        id: 'medium',
+        label: 'Medium',
+        emoji: '🟡',
+        desc: 'Mixed tracks · 2 replays · 10s clip',
+      },
+      {
+        id: 'hard',
+        label: 'Hard',
+        emoji: '🔴',
+        desc: 'Deep cuts only · 1 play · 5s clip',
+      },
+    ]
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100dvh',
+        padding: '32px 20px',
+        gap: 24,
+        textAlign: 'center',
+      }}>
+        <div>
+          <p style={{ color: 'var(--color-muted)', fontSize: 13, margin: '0 0 4px', fontFamily: 'var(--font-body)' }}>Quiz for</p>
+          <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, margin: 0, fontFamily: 'var(--font-display)' }}>
+            {pendingArtist.name}
+          </h2>
+        </div>
+        <p style={{ color: 'var(--color-muted)', fontSize: 14, margin: 0, fontFamily: 'var(--font-body)' }}>
+          Choose your difficulty
+        </p>
+        <div role="radiogroup" aria-label="Choose difficulty" style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 360 }}>
+          {LEVELS.map((level) => (
+            <button
+              key={level.id}
+              onClick={() => handleSelectArtist(pendingArtist, level.id)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 16,
+                padding: '16px 20px',
+                borderRadius: 'var(--radius-lg)',
+                border: `1px solid ${difficulty === level.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                background: difficulty === level.id ? 'rgba(255,107,53,0.08)' : 'var(--color-surface)',
+                color: '#fff',
+                cursor: 'pointer',
+                textAlign: 'left',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-body)',
+                width: '100%',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.background = 'rgba(255,107,53,0.08)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = difficulty === level.id ? 'var(--color-accent)' : 'var(--color-border)'
+                e.currentTarget.style.background = difficulty === level.id ? 'rgba(255,107,53,0.08)' : 'var(--color-surface)'
+              }}
+            >
+              <span style={{ fontSize: 22 }}>{level.emoji}</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>{level.label}</div>
+                <div style={{ fontSize: 12, color: 'var(--color-muted)', marginTop: 2 }}>{level.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setPendingArtist(null)}
+          style={{
+            padding: '10px 24px',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--color-border)',
+            background: 'transparent',
+            color: 'var(--color-muted)',
+            fontSize: 13,
+            cursor: 'pointer',
+            fontFamily: 'var(--font-body)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff' }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-muted)' }}
+        >
+          ← Back
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'hidden' }}>
       <div style={{
@@ -137,10 +245,10 @@ export default function SearchScreen() {
         </div>
       </div>
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
-        <HooklaneHero onSelectArtist={handleSelectArtist} />
+        <HooklaneHero onSelectArtist={handleArtistPick} />
         <HowItWorks />
         <WhyHooklane />
-        <TrendingNow onSelectArtist={handleSelectArtist} />
+        <TrendingNow onSelectArtist={handleArtistPick} />
         <LeaderboardPreview />
         <Footer />
       </div>

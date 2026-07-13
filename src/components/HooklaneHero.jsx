@@ -252,12 +252,24 @@ export default function HooklaneHero({ onSelectArtist }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '0 16px',
-        overflow: 'hidden',
         background: 'transparent',
-        maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
       }}
     >
+      {/* Bottom fade overlay — replaces overflow:hidden + maskImage on the section
+          which was causing a scroll trap (composited layer exit delay) */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '20%',
+          background: 'linear-gradient(to bottom, transparent, var(--color-bg, #0A0A0B))',
+          pointerEvents: 'none',
+          zIndex: 3,
+        }}
+      />
       {/* Vinyl records */}
       {vinyls.map((v, i) => {
         const floatIndex = (i % 6) + 1

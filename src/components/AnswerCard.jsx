@@ -35,11 +35,15 @@ export default function AnswerCard({ track, state, onSelect, index }) {
     opacity = 0.35
   }
 
+  const stateLabel = isCorrect ? ' — Correct!' : isWrong ? ' — Wrong' : ''
+
   return (
     <button
+      role="radio"
       onClick={isDefault ? onSelect : undefined}
       disabled={!isDefault}
-      aria-pressed={isCorrect || isWrong}
+      aria-checked={isCorrect || isWrong ? isCorrect : undefined}
+      aria-label={`${track.title}${stateLabel}`}
       aria-disabled={!isDefault}
       style={{
         display: 'flex',

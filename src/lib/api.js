@@ -33,6 +33,9 @@ export async function searchTracksByArtist(artistName) {
     throw new Error('No tracks found for this artist')
   }
 
+  const normalize = (s) => s.toLowerCase().trim()
+  const searchedNorm = normalize(artistName)
+
   return tracks.map((t, i) => ({
     id: t.trackId,
     title: t.trackName,
@@ -46,5 +49,12 @@ export async function searchTracksByArtist(artistName) {
     artist: {
       name: t.artistName || '',
     },
-  })).filter(t => t.preview && t.preview.length > 0)
+  })).filter(t => {
+    if (!t.preview || t.preview.length === 0) return false
+    // Exact artist match — prevents wrong-artist tracks from polluting the quiz
+    const trackArtistNorm = normalize(t.artist.name)
+    return trackArtistNorm === searchedNorm ||
+      trackArtistNorm.includes(searchedNorm) ||
+      searchedNorm.includes(trackArtistNorm)
+  })
 }

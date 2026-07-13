@@ -5,7 +5,6 @@ import StatBox from '../components/StatBox'
 import ShareCard from '../components/ShareCard'
 import ProfileCard from '../components/ProfileCard'
 import { saveArtistScore } from '../lib/storage'
-import { generateRounds } from '../lib/quizGenerator'
 import { QuizLoading } from '../components/LoadingSkeleton'
 
 const colors = ['#FF6B35', '#22C55E', '#EF4444', '#3B82F6', '#EAB308', '#A855F7', '#EC4899', '#06B6D4']
@@ -60,8 +59,15 @@ function ShareButton({ label, color, onClick, children }) {
 }
 
 export default function ScoreScreen() {
-  const { score, totalRounds, selectedArtist, newArtist, startQuiz, setQuizLoading, setQuizError, quizLoading, quizError } = useStore()
+  const { score, totalRounds, selectedArtist, newArtist, startQuiz, setQuizLoading, setQuizError, quizLoading, quizError, difficulty } = useStore()
   const rounds = useStore((s) => s.rounds)
+
+  const DIFFICULTY_LABELS = {
+    easy:   { emoji: '🟢', label: 'EASY' },
+    medium: { emoji: '🟡', label: 'MEDIUM' },
+    hard:   { emoji: '🔴', label: 'HARD' },
+  }
+  const diffLabel = DIFFICULTY_LABELS[difficulty] || DIFFICULTY_LABELS.medium
   const [shareModal, setShareModal] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const shareCardRef = useRef(null)
@@ -73,7 +79,7 @@ export default function ScoreScreen() {
     if (savedRef.current) return
     savedRef.current = true
     if (selectedArtist?.id) {
-      saveArtistScore(selectedArtist.id, score, totalRounds)
+      saveArtistScore(selectedArtist.id, score, totalRounds, difficulty)
     }
   }, [score, totalRounds, selectedArtist])
 
@@ -149,8 +155,9 @@ export default function ScoreScreen() {
   const handlePlayAgain = async () => {
     setQuizLoading(true)
     try {
-      const nextRounds = await generateRounds(selectedArtist.name)
-      startQuiz(selectedArtist, [], nextRounds)
+      const { generateRounds } = await import('../lib/quizGenerator')
+      const nextRounds = await generateRounds(selectedArtist.name, difficulty)
+      startQuiz(selectedArtist, [], nextRounds, difficulty)
     } catch (err) {
       setQuizError(err.message)
     }
@@ -275,7 +282,7 @@ export default function ScoreScreen() {
         name={`${score} / ${totalRounds}`}
         title={isPerfect ? 'Perfect!' : pct >= 80 ? 'Great job!' : pct >= 60 ? 'Not bad!' : 'Keep practicing!'}
         handle={artistName}
-        status={`${pct}%`}
+        status={`${diffLabel.emoji} ${diffLabel.label} · ${pct}%`}
         contactText={isPerfect ? 'Share Perfect Score!' : 'Share Score'}
         onContactClick={handleOpenShare}
         enableTilt
@@ -296,6 +303,7 @@ export default function ScoreScreen() {
             totalRounds={totalRounds}
             selectedArtist={selectedArtist}
             rounds={rounds}
+            difficulty={difficulty}
           />
         </div>
       )}
@@ -407,7 +415,7 @@ export default function ScoreScreen() {
                   name={`${score} / ${totalRounds}`}
                   title={isPerfect ? 'Perfect!' : pct >= 80 ? 'Great job!' : pct >= 60 ? 'Not bad!' : 'Keep practicing!'}
                   handle={artistName}
-                  status={`${pct}%`}
+                  status={`${diffLabel.emoji} ${diffLabel.label} · ${pct}%`}
                   enableTilt={false}
                   enableMobileTilt={false}
                   behindGlowEnabled={false}

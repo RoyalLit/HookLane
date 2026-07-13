@@ -14,6 +14,7 @@ const useStore = create((set, get) => ({
   totalRounds: 0,
   quizLoading: false,
   quizError: null,
+  difficulty: 'medium', // 'easy' | 'medium' | 'hard'
 
   setSearchQuery: (q) => set({ searchQuery: q }),
 
@@ -27,7 +28,9 @@ const useStore = create((set, get) => ({
 
   clearToast: () => set({ toastMessage: null }),
 
-  startQuiz: (artist, tracks, rounds) => set({
+  setDifficulty: (difficulty) => set({ difficulty }),
+
+  startQuiz: (artist, tracks, rounds, difficulty) => set({
     screen: 'quiz',
     selectedArtist: artist,
     tracks,
@@ -38,6 +41,7 @@ const useStore = create((set, get) => ({
     totalRounds: rounds.length,
     quizLoading: false,
     quizError: null,
+    difficulty: difficulty || get().difficulty,
   }),
 
   setQuizLoading: (v) => set({ quizLoading: v }),

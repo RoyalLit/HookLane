@@ -7,7 +7,14 @@ import PlayButton from '../components/PlayButton'
 import AnswerCard from '../components/AnswerCard'
 
 export default function QuizScreen() {
-  const { rounds, currentRound, selectedArtist, score, totalRounds, answerQuestion, nextRound, exitQuiz } = useStore()
+  const { rounds, currentRound, selectedArtist, score, totalRounds, answerQuestion, nextRound, exitQuiz, difficulty } = useStore()
+
+  const DIFFICULTY_CONFIG = {
+    easy:   { maxPlays: Infinity, clipDuration: 10 },
+    medium: { maxPlays: 2,        clipDuration: 10 },
+    hard:   { maxPlays: 1,        clipDuration: 5  },
+  }
+  const diffConfig = DIFFICULTY_CONFIG[difficulty] || DIFFICULTY_CONFIG.medium
   const shouldReduceMotion = useReducedMotion()
   const [answered, setAnswered] = useState(false)
   const [selectedId, setSelectedId] = useState(null)
@@ -16,16 +23,10 @@ export default function QuizScreen() {
   const nextBtnRef = useRef(null)
   const backBtnRef = useRef(null)
 
+  // Reliable scroll-to-top when round changes (not just after next button)
   useEffect(() => {
-    if (answered) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: shouldReduceMotion ? 'instant' : 'smooth',
-        })
-      }, 50)
-    }
-  }, [answered, shouldReduceMotion])
+    window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'instant' : 'smooth' })
+  }, [currentRound, shouldReduceMotion])
 
   useEffect(() => {
     if (answered && nextBtnRef.current) {
@@ -179,12 +180,20 @@ export default function QuizScreen() {
             alt={selectedArtist?.name}
             size={Math.min(160, typeof window !== 'undefined' ? window.innerWidth - 80 : 160)}
           />
-          <PlayButton key={`btn-${currentRound}`} previewUrl={correctTrack.preview} autoPlay={!answered} />
+          <PlayButton
+            key={`btn-${currentRound}`}
+            previewUrl={correctTrack.preview}
+            autoPlay={!answered}
+            maxPlays={diffConfig.maxPlays}
+            clipDuration={diffConfig.clipDuration}
+          />
         </motion.div>
       </AnimatePresence>
 
       {/* Answer grid */}
       <div
+        role="radiogroup"
+        aria-label="Choose the correct song"
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',

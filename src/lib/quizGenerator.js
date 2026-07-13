@@ -9,7 +9,8 @@ function shuffle(arr) {
   return a
 }
 
-export async function generateRounds(artistName) {
+// difficulty: 'easy' | 'medium' | 'hard'
+export async function generateRounds(artistName, difficulty = 'medium') {
   let tracks = await searchTracksByArtist(artistName)
 
   // Deduplicate by id AND by title (iTunes returns same track across albums)
@@ -44,20 +45,34 @@ export async function generateRounds(artistName) {
     tertileByTrack.set(t, i < third ? 0 : i < third * 2 ? 1 : 2)
   })
 
-  const totalRounds = Math.min(10, n)
-  const popularCount = Math.min(2, Math.floor(totalRounds * 0.2))
-  const midCount = Math.min(3, Math.floor(totalRounds * 0.3))
-  const deepCount = totalRounds - popularCount - midCount
+  const TOTAL_ROUNDS = 10
 
   const pick = (pool, count) => shuffle(pool).slice(0, count)
 
-  let selected = [
-    ...pick(popular, popularCount),
-    ...pick(mid, midCount),
-    ...pick(deep, deepCount),
-  ]
+  // Select question tracks based on difficulty
+  let selected = []
+  if (difficulty === 'easy') {
+    // Top tertile only (biggest hits)
+    const available = popular.length >= TOTAL_ROUNDS ? popular : [...popular, ...mid]
+    selected = pick(available, TOTAL_ROUNDS)
+  } else if (difficulty === 'hard') {
+    // Bottom tertile only (deep cuts)
+    const available = deep.length >= TOTAL_ROUNDS ? deep : [...deep, ...mid]
+    selected = pick(available, TOTAL_ROUNDS)
+  } else {
+    // Medium: balanced mix like before
+    const popularCount = Math.min(2, Math.floor(TOTAL_ROUNDS * 0.2))
+    const midCount = Math.min(3, Math.floor(TOTAL_ROUNDS * 0.3))
+    const deepCount = TOTAL_ROUNDS - popularCount - midCount
+    selected = [
+      ...pick(popular, popularCount),
+      ...pick(mid, midCount),
+      ...pick(deep, deepCount),
+    ]
+  }
 
-  while (selected.length < totalRounds && tracks.length > 0) {
+  // Pad if not enough tracks in target tertile
+  while (selected.length < TOTAL_ROUNDS && tracks.length > 0) {
     const remaining = tracks.filter(t => !selected.some(s => s.id === t.id))
     if (remaining.length === 0) break
     selected.push(remaining[Math.floor(Math.random() * remaining.length)])
@@ -75,11 +90,22 @@ export async function generateRounds(artistName) {
       byDistance[distance].push(t)
     }
 
-    const ordered = [
-      ...shuffle(byDistance[0]),
-      ...shuffle(byDistance[1]),
-      ...shuffle(byDistance[2]),
-    ]
+    let ordered
+    if (difficulty === 'easy') {
+      // Easy: distractors from far tertile (obvious fakes)
+      ordered = [
+        ...shuffle(byDistance[2]),
+        ...shuffle(byDistance[1]),
+        ...shuffle(byDistance[0]),
+      ]
+    } else {
+      // Medium & Hard: same-tertile distractors first (harder to distinguish)
+      ordered = [
+        ...shuffle(byDistance[0]),
+        ...shuffle(byDistance[1]),
+        ...shuffle(byDistance[2]),
+      ]
+    }
 
     const distractors = []
     const seen = new Set()
@@ -95,12 +121,10 @@ export async function generateRounds(artistName) {
 
   const rounds = selected.map((correctTrack) => {
     const distractors = pickDistractors(correctTrack)
-
     const options = shuffle([
       { track: correctTrack, isCorrect: true },
       ...distractors.map(t => ({ track: t, isCorrect: false })),
     ])
-
     return { correctTrack, options }
   })
 

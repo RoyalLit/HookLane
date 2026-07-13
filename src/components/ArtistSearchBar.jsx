@@ -49,7 +49,7 @@ export default function ArtistSearchBar({ onSelectArtist, transparent }) {
         placeholder="Search your favorite artist..."
         style={{
           width: '100%',
-          padding: transparent ? '14px 0' : '14px 18px',
+          padding: transparent ? '14px 0' : searchQuery ? '14px 44px 14px 18px' : '14px 18px',
           fontSize: 16,
           fontWeight: 400,
           fontFamily: 'var(--font-mono)',
@@ -76,6 +76,34 @@ export default function ArtistSearchBar({ onSelectArtist, transparent }) {
           }
         }}
       />
+      {searchQuery && (
+        <button
+          onClick={() => { setSearchQuery(''); setSearchResults([]) }}
+          aria-label="Clear search"
+          style={{
+            position: 'absolute',
+            right: transparent ? 0 : 14,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'none',
+            border: 'none',
+            color: 'var(--color-muted)',
+            cursor: 'pointer',
+            padding: 4,
+            fontSize: 16,
+            lineHeight: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            transition: 'color 0.15s',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#fff'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-muted)'}
+        >
+          ✕
+        </button>
+      )}
       {focused && searchResults.length > 0 && (
         <div style={{
           position: 'absolute',

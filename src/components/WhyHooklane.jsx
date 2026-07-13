@@ -12,11 +12,11 @@ const features = [
     ),
   },
   {
-    title: 'Play as Guest or Sign In',
-    desc: 'Jump in instantly with no signup. Or create an account to unlock streaks, badges, and cross-device stats.',
+    title: '3 Difficulty Levels',
+    desc: 'Easy mode eases you in with top hits and unlimited replays. Hard mode gives you one listen, a 5-second clip, and deep cuts only. Pick your poison.',
     icon: (
       <svg style={{ width: 24, height: 24 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
       </svg>
     ),
   },
@@ -31,7 +31,7 @@ const features = [
   },
   {
     title: 'Any Artist, Instantly',
-    desc: "Millions of artists available through Deezer's catalog. Type a name and start playing in seconds.",
+    desc: 'Millions of artists available. Type a name and start playing in seconds — no account, no playlist, no friction.',
     icon: (
       <svg style={{ width: 24, height: 24 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />

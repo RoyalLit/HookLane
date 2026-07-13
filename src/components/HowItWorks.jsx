@@ -15,8 +15,18 @@ const steps = [
   },
   {
     num: '02',
+    title: 'Pick Your Difficulty',
+    desc: 'Easy gets you the big hits with unlimited replays. Hard throws deep cuts at you with one listen and a 5-second clip. Choose your challenge.',
+    icon: (
+      <svg style={{ width: 32, height: 32 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+      </svg>
+    ),
+  },
+  {
+    num: '03',
     title: 'Guess the Clips',
-    desc: "Listen to 10-second song previews and pick the right title from 4 options. Deep cuts included.",
+    desc: 'Audio previews autoplay each round. Identify the song from 4 options — album art included. 10 rounds, no mercy.',
     icon: (
       <svg style={{ width: 32, height: 32 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
@@ -24,9 +34,9 @@ const steps = [
     ),
   },
   {
-    num: '03',
+    num: '04',
     title: 'Share Your Score',
-    desc: "Prove you're the real fan. Share your result as a beautiful image card with your friends.",
+    desc: 'Your result is stamped with your difficulty badge and score. Download the card or share it directly — prove you\'re the real fan.',
     icon: (
       <svg style={{ width: 32, height: 32 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />

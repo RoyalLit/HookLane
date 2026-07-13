@@ -78,7 +78,13 @@ function drawAlbumCover(ctx, img, x, y, size) {
   ctx.stroke()
 }
 
-const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedArtist, rounds }, ref) {
+const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedArtist, rounds, difficulty }, ref) {
+  const DIFFICULTY_MAP = {
+    easy:   { emoji: '🟢', label: 'EASY' },
+    medium: { emoji: '🟡', label: 'MEDIUM' },
+    hard:   { emoji: '🔴', label: 'HARD' },
+  }
+  const diff = DIFFICULTY_MAP[difficulty] || DIFFICULTY_MAP.medium
   const canvasRef = useRef(null)
   const previewCanvasRef = useRef(null)
   const generatingRef = useRef(false)
@@ -182,8 +188,28 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
         drawAlbumCover(ctx, albumImgs[i], x, y, albumSize)
       }
 
+      // --- difficulty badge ---
+      const diffBadgeY = scoreY + 118
+      const diffText = `${diff.label}`
+      ctx.font = 'bold 22px Inter, system-ui, -apple-system, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      const badgeW = ctx.measureText(diffText).width + 36
+      const badgeH = 36
+      const badgeBx = SIZE / 2 - badgeW / 2
+      const badgeBg = difficulty === 'hard' ? 'rgba(239,68,68,0.15)' : difficulty === 'easy' ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)'
+      const badgeBorder = difficulty === 'hard' ? '#EF4444' : difficulty === 'easy' ? '#22C55E' : '#EAB308'
+      roundRect(ctx, badgeBx, diffBadgeY, badgeW, badgeH, 8)
+      ctx.fillStyle = badgeBg
+      ctx.fill()
+      ctx.strokeStyle = badgeBorder
+      ctx.lineWidth = 1.5
+      ctx.stroke()
+      ctx.fillStyle = badgeBorder
+      ctx.fillText(diffText, SIZE / 2, diffBadgeY + badgeH / 2)
+
       // --- Hooklane wordmark ---
-      const wmY = SIZE - 75
+      const wmY = SIZE - 90
       ctx.font = 'bold 44px Inter, system-ui, -apple-system, sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
@@ -198,6 +224,13 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       ctx.fillText(hookTxt, wmX, wmY)
       ctx.fillStyle = '#FFFFFF'
       ctx.fillText(laneTxt, wmX + hookW, wmY)
+
+      // --- site URL ---
+      ctx.font = '22px Inter, system-ui, -apple-system, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'top'
+      ctx.fillStyle = MUTED
+      ctx.fillText('hooklane.vercel.app', SIZE / 2, wmY + 52)
 
       // generate blob
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
