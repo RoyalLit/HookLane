@@ -19,7 +19,7 @@ export default function App() {
       case 'quiz':
         return (
           <ErrorBoundary>
-            <Suspense fallback={<div className="min-h-[100dvh]" />}>
+            <Suspense fallback={<div style={{minHeight:'100dvh'}} />}>
               <QuizScreen />
             </Suspense>
           </ErrorBoundary>
@@ -27,7 +27,7 @@ export default function App() {
       case 'score':
         return (
           <ErrorBoundary>
-            <Suspense fallback={<div className="min-h-[100dvh]" />}>
+            <Suspense fallback={<div style={{minHeight:'100dvh'}} />}>
               <ScoreScreen />
             </Suspense>
           </ErrorBoundary>
@@ -43,7 +43,7 @@ export default function App() {
       <ErrorToast message={toastMessage} onDismiss={clearToast} />
       <main
         id="main-content"
-        className="animate-[fadeIn_0.25s_ease-out]"
+        style={{ animation: 'fadeIn 0.25s ease-out' }}
       >
         {renderScreen()}
       </main>

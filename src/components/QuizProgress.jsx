@@ -3,6 +3,12 @@ import useStore from '../store'
 export default function QuizProgress() {
   const { currentRound, totalRounds } = useStore()
 
+  function barBg(i) {
+    if (i < currentRound) return 'var(--color-accent)'
+    if (i === currentRound) return 'rgba(255,107,53,0.4)'
+    return 'var(--color-border)'
+  }
+
   return (
     <div
       role="progressbar"
@@ -10,18 +16,22 @@ export default function QuizProgress() {
       aria-valuemin={1}
       aria-valuemax={totalRounds}
       aria-label={`Question ${currentRound + 1} of ${totalRounds}`}
-      className="flex w-full gap-1.5"
+      style={{
+        display: 'flex',
+        gap: 4,
+        width: '100%',
+      }}
     >
       {Array.from({ length: totalRounds }, (_, i) => (
         <div
           key={i}
-          className={`flex-1 h-2 rounded-full transition-all duration-300 ${
-            i < currentRound
-              ? 'bg-[var(--color-correct)]'
-              : i === currentRound
-              ? 'w-[10px] bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent-glow)] animate-pulse-glow'
-              : 'bg-[var(--color-border)]'
-          }`}
+          style={{
+            flex: 1,
+            height: 6,
+            borderRadius: 3,
+            background: barBg(i),
+            transition: 'background 0.3s',
+          }}
         />
       ))}
     </div>

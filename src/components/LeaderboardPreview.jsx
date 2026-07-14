@@ -1,19 +1,41 @@
 import FadeIn from './ui/FadeIn'
+import StarBorder from './ui/StarBorder'
 
 export default function LeaderboardPreview() {
   return (
-    <section className="relative py-24 px-4 bg-[rgba(10,10,11,0.2)]">
-      <div className="mx-auto max-w-[640px] text-center">
+    <section style={{ position: 'relative', padding: '96px 16px', background: 'rgba(10,10,11,0.2)' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <FadeIn direction="left" scale>
-          <h2 className="font-display font-extrabold text-[clamp(28px,5vw,48px)] text-white">
+          <h2 style={{
+            fontSize: 'clamp(28px, 5vw, 48px)',
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
+            color: '#fff',
+            textAlign: 'center',
+            marginBottom: 12,
+          }}>
             Leaderboards Coming Soon
           </h2>
-          <p className="text-[var(--color-muted)] mt-4 max-w-[400px] mx-auto font-body text-[clamp(14px,1.8vw,16px)] leading-relaxed">
+          <p style={{
+            color: 'var(--color-muted)',
+            marginBottom: 32,
+            maxWidth: 400,
+            margin: '0 auto 32px',
+            fontSize: 'clamp(14px, 1.8vw, 16px)',
+            fontFamily: 'var(--font-body)',
+            lineHeight: 1.6,
+          }}>
             Create an account to track streaks, earn badges, and compete on global and per-artist leaderboards.
           </p>
-          <button className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-[var(--radius-md)] bg-[var(--color-accent)] text-white font-bold text-sm uppercase tracking-[0.08em] font-[var(--font-body)] shadow-[0_0_25px_rgba(255,107,53,0.25)] hover:shadow-[0_0_45px_rgba(255,107,53,0.45)] hover:scale-[1.03] active:scale-[0.97] transition-all duration-200">
-            Create Account to Track Streaks & Rank
-          </button>
+          <StarBorder
+            as="button"
+            color="#FF6B35"
+            speed="8s"
+            thickness={1}
+            style={{ display: 'inline-flex' }}
+          >
+            <span style={{ fontSize: 14 }}>Create Account</span>
+          </StarBorder>
         </FadeIn>
       </div>
     </section>

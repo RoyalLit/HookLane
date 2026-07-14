@@ -9,29 +9,62 @@ const GITHUB_SVG = (
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-[rgba(255,107,53,0.1)] bg-[linear-gradient(to_bottom,rgba(10,10,11,0.4),rgba(10,10,11,0.9))] backdrop-blur-[20px] relative z-10">
+    <footer style={{
+      width: '100%',
+      borderTop: '1px solid rgba(255,107,53,0.1)',
+      background: 'linear-gradient(to bottom, rgba(10,10,11,0.4), rgba(10,10,11,0.9))',
+      WebkitBackdropFilter: 'blur(20px)',
+      backdropFilter: 'blur(20px)',
+      position: 'relative',
+      zIndex: 10,
+    }}>
       <FadeIn scale={false}>
-        <div className="mx-auto max-w-[1280px] px-6 py-12 flex flex-col gap-10">
+        <div style={{
+          maxWidth: 1280,
+          margin: '0 auto',
+          padding: '48px 24px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 40,
+        }}>
           
           {/* Main Footer Content */}
-          <div className="flex flex-row flex-wrap justify-between items-center gap-6">
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 24,
+          }}>
             
             {/* Logo & Tagline */}
-            <div className="flex flex-col gap-3">
-              <span className="font-display text-[24px] font-extrabold tracking-tight">
-                <span className="text-[var(--color-accent)]">Hook</span><span className="text-white">lane</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <span style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 24,
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+              }}>
+                <span style={{ color: '#FF6B35' }}>Hook</span><span style={{ color: '#fff' }}>lane</span>
               </span>
-              <div className="flex flex-col gap-1">
-                <p className="text-[rgba(200,198,203,0.7)] text-sm font-body m-0">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <p style={{ color: 'rgba(200,198,203,0.7)', fontSize: 14, fontFamily: 'var(--font-body)', margin: 0 }}>
                   Prove your fandom. Guess the song.
                 </p>
-                <p className="text-[rgba(200,198,203,0.5)] text-xs font-body m-0">
+                <p style={{ color: 'rgba(200,198,203,0.5)', fontSize: 13, fontFamily: 'var(--font-body)', margin: 0 }}>
                   Designed & Built by{' '}
                   <a 
                     href="https://github.com/RoyalLit" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-white no-underline transition-colors hover:text-[var(--color-accent)]"
+                    style={{ 
+                      color: '#fff', 
+                      textDecoration: 'none',
+                      transition: 'color 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#FF6B35'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#fff'}
                   >
                     Pahul
                   </a>
@@ -40,7 +73,7 @@ export default function Footer() {
             </div>
 
             {/* Socials */}
-            <div className="flex items-center gap-4">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <motion.a
                 href="https://github.com/RoyalLit"
                 target="_blank"
@@ -48,7 +81,26 @@ export default function Footer() {
                 title="Pahul's GitHub Profile"
                 whileHover={{ scale: 1.1, color: '#fff' }}
                 whileTap={{ scale: 0.95 }}
-                className="text-[rgba(200,198,203,0.5)] flex items-center justify-center w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.08] hover:border-white/[0.1] transition-all"
+                style={{
+                  color: 'rgba(200,198,203,0.5)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  transition: 'background 0.2s, border-color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+                }}
               >
                 {GITHUB_SVG}
               </motion.a>
@@ -56,10 +108,22 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="flex flex-row flex-wrap justify-between items-center gap-4 pt-6 border-t border-white/[0.05] text-xs text-[rgba(200,198,203,0.4)] font-body">
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 16,
+            paddingTop: 24,
+            borderTop: '1px solid rgba(255,255,255,0.05)',
+            fontSize: 12,
+            color: 'rgba(200,198,203,0.4)',
+            fontFamily: 'var(--font-body)',
+          }}>
             <span>&copy; {new Date().getFullYear()} Hooklane. All rights reserved.</span>
             <span>
-              Powered by <a href="https://deezer.com" target="_blank" rel="noopener noreferrer" className="text-[rgba(200,198,203,0.6)] no-underline hover:text-[var(--color-accent)] transition-colors">Deezer API</a>
+              Powered by <a href="https://deezer.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(200,198,203,0.6)', textDecoration: 'none' }}>Deezer API</a>
             </span>
           </div>
 
