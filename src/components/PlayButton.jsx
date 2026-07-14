@@ -23,7 +23,6 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
     setPlayCount(0)
 
     if (autoPlay && previewUrl) {
-      // Small timeout to let the UI transition finish before blasting audio
       const t = setTimeout(() => {
         playAudio()
       }, 400)
@@ -103,92 +102,81 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
   }
 
   const canPlay = !!previewUrl && !isMaxed
-
-  const boxShadow = isMaxed
-    ? '0 0 15px rgba(255,107,53,0.1)'
-    : '0 0 25px rgba(255,107,53,0.25)'
-
   const showTapLabel = !playing && !loading && !audioFailed && needsGesture && !isMaxed
 
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <button
-        onClick={toggle}
-        disabled={!previewUrl || (isMaxed && !playing)}
-        aria-label={
-          isMaxed ? 'No replays remaining' :
-          audioFailed ? 'Audio unavailable' :
-          playing ? 'Pause' : 'Play preview'
-        }
-        aria-pressed={playing}
-        style={{
-          width: 56,
-          height: 56,
-          borderRadius: '50%',
-          border: `2px solid ${audioFailed ? 'var(--color-wrong)' : isMaxed ? 'var(--color-border)' : 'var(--color-accent)'}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: isMaxed ? 'var(--color-muted)' : '#fff',
-          fontSize: 20,
-          cursor: canPlay || playing ? 'pointer' : 'not-allowed',
-          opacity: !previewUrl ? 0.3 : isMaxed ? 0.45 : 1,
-          transition: 'all 0.2s',
-          background: loading ? 'var(--color-surface-hover)' : playing ? 'transparent' : isMaxed ? 'transparent' : 'var(--color-accent)',
-          boxShadow,
-          outline: 'none',
-          fontFamily: 'var(--font-body)',
-          minWidth: 56,
-          minHeight: 56,
-        }}
-      >
-        {loading ? (
-          <div
-            style={{
-              width: 18,
-              height: 18,
-              border: '2px solid var(--color-muted)',
-              borderTopColor: '#fff',
-              borderRadius: '50%',
-              animation: 'spin 0.6s linear infinite',
-            }}
-          />
-        ) : audioFailed ? (
-          <span style={{ fontSize: 16, fontWeight: 700 }}>!</span>
-        ) : isMaxed ? (
-          // Locked icon
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-        ) : hasPlayed ? (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12a9 9 0 1 1-9-9" />
-            <path d="M21 3v5h-5" />
-          </svg>
-        ) : playing ? (
-          <span style={{ fontSize: 16 }}>⏸</span>
-        ) : (
-          <span style={{ fontSize: 16, marginLeft: 2 }}>▶</span>
-        )}
-      </button>
+  let buttonClasses = 'relative z-10 w-14 h-14 rounded-full border-2 flex items-center justify-center text-xl transition-all duration-200 outline-none font-body min-w-[56px] min-h-[56px]'
+  
+  if (audioFailed) {
+    buttonClasses += ' border-[var(--color-wrong)] bg-[var(--color-accent)] text-white'
+  } else if (isMaxed) {
+    buttonClasses += ' border-[var(--color-border)] bg-transparent text-[var(--color-muted)] opacity-45 shadow-[0_0_15px_rgba(255,107,53,0.1)] cursor-not-allowed'
+  } else {
+    buttonClasses += ' border-[var(--color-accent)] text-white cursor-pointer shadow-[0_0_25px_rgba(255,107,53,0.25)]'
+    if (loading) {
+      buttonClasses += ' bg-[var(--color-surface-hover)]'
+    } else if (playing) {
+      buttonClasses += ' bg-transparent shadow-[0_0_35px_rgba(255,107,53,0.4)]'
+    } else {
+      buttonClasses += ' bg-[var(--color-accent)]'
+    }
+  }
 
-      {/* Play count indicator for limited modes */}
+  if (!previewUrl) {
+    buttonClasses += ' opacity-30 cursor-not-allowed'
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative">
+        {/* Expanding concentric pulsing rings when playing */}
+        {playing && (
+          <>
+            <div className="absolute top-0 left-0 w-14 h-14 rounded-full border-2 border-[var(--color-accent)] animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50 z-0" />
+            <div className="absolute top-0 left-0 w-14 h-14 rounded-full border-2 border-[var(--color-accent)] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite_0.5s] opacity-30 z-0" />
+          </>
+        )}
+
+        <button
+          onClick={toggle}
+          disabled={!previewUrl || (isMaxed && !playing)}
+          aria-label={
+            isMaxed ? 'No replays remaining' :
+            audioFailed ? 'Audio unavailable' :
+            playing ? 'Pause' : 'Play preview'
+          }
+          aria-pressed={playing}
+          className={buttonClasses}
+        >
+          {loading ? (
+            <div className="w-4.5 h-4.5 border-2 border-[var(--color-muted)] border-t-white rounded-full animate-spin" />
+          ) : audioFailed ? (
+            <span className="text-base font-bold">!</span>
+          ) : isMaxed ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          ) : hasPlayed ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 12a9 9 0 1 1-9-9" />
+              <path d="M21 3v5h-5" />
+            </svg>
+          ) : playing ? (
+            <span className="text-base">⏸</span>
+          ) : (
+            <span className="text-base ml-0.5">▶</span>
+          )}
+        </button>
+      </div>
+
       {maxPlays !== Infinity && (
-        <span style={{
-          fontSize: 10,
-          color: isMaxed ? 'var(--color-wrong)' : 'var(--color-muted)',
-          marginTop: 5,
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          fontFamily: 'var(--font-body)',
-        }}>
+        <span className={`text-[10px] mt-1.5 font-semibold tracking-wide font-body ${isMaxed ? 'text-[var(--color-wrong)]' : 'text-[var(--color-muted)]'}`}>
           {isMaxed ? 'no replays' : `${maxPlays - playCount} play${maxPlays - playCount !== 1 ? 's' : ''} left`}
         </span>
       )}
 
       {showTapLabel && (
-        <span style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 6 }}>tap to play</span>
+        <span className="text-[11px] text-[var(--color-muted)] mt-1.5 font-body">tap to play</span>
       )}
     </div>
   )

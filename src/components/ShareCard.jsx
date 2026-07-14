@@ -80,9 +80,9 @@ function drawAlbumCover(ctx, img, x, y, size) {
 
 const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedArtist, rounds, difficulty }, ref) {
   const DIFFICULTY_MAP = {
-    easy:   { emoji: '🟢', label: 'EASY' },
-    medium: { emoji: '🟡', label: 'MEDIUM' },
-    hard:   { emoji: '🔴', label: 'HARD' },
+    easy:   { label: 'EASY' },
+    medium: { label: 'MEDIUM' },
+    hard:   { label: 'HARD' },
   }
   const diff = DIFFICULTY_MAP[difficulty] || DIFFICULTY_MAP.medium
   const canvasRef = useRef(null)

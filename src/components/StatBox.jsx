@@ -11,128 +11,45 @@ export default function StatBox({ artistId, currentScore, currentOutOf }) {
   const last5Str = display.last5.map(s => `${s.score}/${s.outOf}`).join(', ')
 
   return (
-    <div
-      style={{
-        background: 'linear-gradient(145deg, #1a1a1e 0%, #121214 100%)',
-        borderRadius: 20,
-        padding: '20px 24px',
-        border: '1px solid rgba(255,255,255,0.06)',
-        width: '100%',
-        boxSizing: 'border-box',
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      <div
-        style={{
-          color: 'rgba(255,255,255,0.5)',
-          fontSize: 11,
-          marginBottom: 16,
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          letterSpacing: '1.5px',
-          fontFamily: 'var(--font-body)',
-        }}
-      >
+    <div className="w-full box-border rounded-[20px] p-5 border border-white/5 bg-gradient-to-br from-[#1a1a1e] to-[#121214] backdrop-blur-md">
+      <div className="text-white/50 text-[11px] mb-4 font-semibold uppercase tracking-[1.5px] font-body">
         Score History
       </div>
-      <div style={{ display: 'flex', gap: 0, justifyContent: 'space-between' }}>
-        <div style={{ textAlign: 'center', flex: 1 }}>
-          <div
-            style={{
-              background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0.4))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: 'clamp(28px, 5vw, 48px)',
-              fontWeight: 700,
-              fontFamily: 'var(--font-mono)',
-              lineHeight: 1.1,
-            }}
-          >
+      
+      <div className="flex gap-2 justify-between">
+        {/* Best Score Chip */}
+        <div className="flex-1 text-center bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-inner">
+          <div className="text-[var(--color-accent)] text-2xl sm:text-3xl font-bold font-mono leading-tight drop-shadow-sm">
             {display.best ? `${display.best.score}/${display.best.outOf}` : '—'}
           </div>
-          <div
-            style={{
-              color: 'rgba(255,255,255,0.35)',
-              fontSize: 10,
-              textTransform: 'uppercase',
-              letterSpacing: '1.2px',
-              fontFamily: 'var(--font-body)',
-              marginTop: 4,
-            }}
-          >
+          <div className="text-[var(--color-accent)]/60 text-[10px] uppercase tracking-[1.2px] font-body mt-1">
             Best
           </div>
         </div>
-        <div style={{ textAlign: 'center', flex: 1 }}>
-          <div
-            style={{
-              background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0.4))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: 'clamp(28px, 5vw, 48px)',
-              fontWeight: 700,
-              fontFamily: 'var(--font-mono)',
-              lineHeight: 1.1,
-            }}
-          >
+        
+        {/* Best % Chip */}
+        <div className="flex-1 text-center bg-[var(--color-correct)]/10 border border-[var(--color-correct)]/20 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-inner">
+          <div className="text-[var(--color-correct)] text-2xl sm:text-3xl font-bold font-mono leading-tight drop-shadow-sm">
             {bestPct}%
           </div>
-          <div
-            style={{
-              color: 'rgba(255,255,255,0.35)',
-              fontSize: 10,
-              textTransform: 'uppercase',
-              letterSpacing: '1.2px',
-              fontFamily: 'var(--font-body)',
-              marginTop: 4,
-            }}
-          >
+          <div className="text-[var(--color-correct)]/60 text-[10px] uppercase tracking-[1.2px] font-body mt-1">
             Best %
           </div>
         </div>
-        <div style={{ textAlign: 'center', flex: 1 }}>
-          <div
-            style={{
-              background: 'linear-gradient(to bottom, #fff, rgba(255,255,255,0.4))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: 'clamp(28px, 5vw, 48px)',
-              fontWeight: 700,
-              fontFamily: 'var(--font-mono)',
-              lineHeight: 1.1,
-            }}
-          >
+        
+        {/* Plays Chip */}
+        <div className="flex-1 text-center bg-[#a855f7]/10 border border-[#a855f7]/20 rounded-xl p-2.5 flex flex-col items-center justify-center shadow-inner">
+          <div className="text-[#a855f7] text-2xl sm:text-3xl font-bold font-mono leading-tight drop-shadow-sm">
             {display.plays}
           </div>
-          <div
-            style={{
-              color: 'rgba(255,255,255,0.35)',
-              fontSize: 10,
-              textTransform: 'uppercase',
-              letterSpacing: '1.2px',
-              fontFamily: 'var(--font-body)',
-              marginTop: 4,
-            }}
-          >
+          <div className="text-[#a855f7]/60 text-[10px] uppercase tracking-[1.2px] font-body mt-1">
             Plays
           </div>
         </div>
       </div>
+
       {display.last5.length > 0 && (
-        <div
-          style={{
-            marginTop: 16,
-            paddingTop: 12,
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            color: 'rgba(255,255,255,0.3)',
-            fontSize: 11,
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.3px',
-          }}
-        >
+        <div className="mt-4 pt-3 border-t border-white/5 text-white/30 text-[11px] font-mono tracking-[0.3px]">
           Last 5: {last5Str}
         </div>
       )}

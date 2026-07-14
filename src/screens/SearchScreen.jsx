@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import useStore from '../store'
 import { generateRounds } from '../lib/quizGenerator'
 import { QuizLoading } from '../components/LoadingSkeleton'
@@ -33,6 +34,7 @@ export default function SearchScreen() {
 
   const handleSelectArtist = async (artist, chosenDifficulty) => {
     const diff = chosenDifficulty || difficulty
+    setPendingArtist(null)
     setLoadingTimedOut(false)
     setQuizLoading(true)
     setDifficulty(diff)
@@ -56,27 +58,13 @@ export default function SearchScreen() {
 
   if (quizLoading) {
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="relative">
         <QuizLoading />
         {loadingTimedOut ? (
-          <div style={{
-            position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)',
-            display: 'flex', gap: 10, zIndex: 50,
-          }}>
+          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 flex gap-2.5 z-50">
             <button
               onClick={() => setQuizLoading(false)}
-              style={{
-                padding: '12px 24px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--color-accent)',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 13,
-                fontWeight: 700,
-                fontFamily: 'var(--font-body)',
-                boxShadow: '0 0 25px rgba(255,107,53,0.25)',
-              }}
+              className="px-6 py-3 rounded-md bg-[var(--color-accent)] text-white border-none cursor-pointer text-[13px] font-bold font-body shadow-[0_0_25px_rgba(255,107,53,0.25)] transition-all hover:scale-105 active:scale-95"
             >
               Cancel — Try Again
             </button>
@@ -87,20 +75,7 @@ export default function SearchScreen() {
               setQuizLoading(false)
               clearTimeout(loadingTimeoutRef.current)
             }}
-            style={{
-              position: 'fixed', top: 20, left: 20, zIndex: 50,
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--color-border)',
-              background: 'rgba(0,0,0,0.6)',
-              color: 'var(--color-muted)',
-              fontSize: 12,
-              cursor: 'pointer',
-              fontFamily: 'var(--font-body)',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff' }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-muted)' }}
+            className="fixed top-5 left-5 z-50 px-4 py-2 rounded-md border border-[var(--color-border)] bg-black/60 text-[var(--color-muted)] text-[12px] cursor-pointer font-body transition-all hover:border-[var(--color-accent)] hover:text-white"
           >
             ← Back
           </button>
@@ -109,122 +84,18 @@ export default function SearchScreen() {
     )
   }
 
-  // Difficulty picker modal
-  if (pendingArtist) {
-    const LEVELS = [
-      {
-        id: 'easy',
-        label: 'Easy',
-        emoji: '🟢',
-        desc: 'Top hits only · Unlimited replays · 10s clip',
-      },
-      {
-        id: 'medium',
-        label: 'Medium',
-        emoji: '🟡',
-        desc: 'Mixed tracks · 2 replays · 10s clip',
-      },
-      {
-        id: 'hard',
-        label: 'Hard',
-        emoji: '🔴',
-        desc: 'Deep cuts only · 1 play · 5s clip',
-      },
-    ]
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100dvh',
-        padding: '32px 20px',
-        gap: 24,
-        textAlign: 'center',
-      }}>
-        <div>
-          <p style={{ color: 'var(--color-muted)', fontSize: 13, margin: '0 0 4px', fontFamily: 'var(--font-body)' }}>Quiz for</p>
-          <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 800, margin: 0, fontFamily: 'var(--font-display)' }}>
-            {pendingArtist.name}
-          </h2>
-        </div>
-        <p style={{ color: 'var(--color-muted)', fontSize: 14, margin: 0, fontFamily: 'var(--font-body)' }}>
-          Choose your difficulty
-        </p>
-        <div role="radiogroup" aria-label="Choose difficulty" style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 360 }}>
-          {LEVELS.map((level) => (
-            <button
-              key={level.id}
-              onClick={() => handleSelectArtist(pendingArtist, level.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                padding: '16px 20px',
-                borderRadius: 'var(--radius-lg)',
-                border: `1px solid ${difficulty === level.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                background: difficulty === level.id ? 'rgba(255,107,53,0.08)' : 'var(--color-surface)',
-                color: '#fff',
-                cursor: 'pointer',
-                textAlign: 'left',
-                transition: 'all 0.2s',
-                fontFamily: 'var(--font-body)',
-                width: '100%',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--color-accent)'
-                e.currentTarget.style.background = 'rgba(255,107,53,0.08)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = difficulty === level.id ? 'var(--color-accent)' : 'var(--color-border)'
-                e.currentTarget.style.background = difficulty === level.id ? 'rgba(255,107,53,0.08)' : 'var(--color-surface)'
-              }}
-            >
-              <span style={{ fontSize: 22 }}>{level.emoji}</span>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{level.label}</div>
-                <div style={{ fontSize: 12, color: 'var(--color-muted)', marginTop: 2 }}>{level.desc}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => setPendingArtist(null)}
-          style={{
-            padding: '10px 24px',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--color-border)',
-            background: 'transparent',
-            color: 'var(--color-muted)',
-            fontSize: 13,
-            cursor: 'pointer',
-            fontFamily: 'var(--font-body)',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff' }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-muted)' }}
-        >
-          ← Back
-        </button>
-      </div>
-    )
-  }
+  const LEVELS = [
+    { id: 'easy', label: 'Easy', desc: 'Top hits only · Unlimited replays · 10s clip', color: 'var(--color-correct)' },
+    { id: 'medium', label: 'Medium', desc: 'Mixed tracks · 2 replays · 10s clip', color: 'var(--color-accent)' },
+    { id: 'hard', label: 'Hard', desc: 'Deep cuts only · 1 play · 5s clip', color: 'var(--color-wrong)' },
+  ]
 
   return (
-    <div style={{ position: 'relative', width: '100%', overflowX: 'hidden' }}>
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}>
-        {/* Grainient with fade mask so it only appears below Hero */}
-        <div style={{ 
-          position: 'absolute', 
-          inset: 0, 
-          opacity: 0.5,
+    <div className="relative w-full overflow-x-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 opacity-50" style={{
           maskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)'
         }}>
           <Grainient
             color1="#8A3B1C"
@@ -244,7 +115,8 @@ export default function SearchScreen() {
           />
         </div>
       </div>
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+      
+      <div className="relative z-10 flex flex-col">
         <HooklaneHero onSelectArtist={handleArtistPick} />
         <HowItWorks />
         <WhyHooklane />
@@ -252,6 +124,66 @@ export default function SearchScreen() {
         <LeaderboardPreview />
         <Footer />
       </div>
+
+      <AnimatePresence>
+        {pendingArtist && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-5"
+            onClick={() => setPendingArtist(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-[380px] bg-[var(--color-surface)] border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-5 text-center"
+            >
+              <div>
+                <p className="text-[var(--color-muted)] text-[13px] m-0 mb-1 font-body">Quiz for</p>
+                <h2 className="text-white text-[22px] font-extrabold m-0 font-display truncate">
+                  {pendingArtist.name}
+                </h2>
+              </div>
+              
+              <div role="radiogroup" aria-label="Choose difficulty" className="flex flex-col gap-3 w-full">
+                {LEVELS.map((level) => {
+                  const isSelected = difficulty === level.id
+                  return (
+                    <button
+                      key={level.id}
+                      onClick={() => handleSelectArtist(pendingArtist, level.id)}
+                      className={`flex items-center gap-4 px-5 py-4 rounded-xl border text-left transition-all duration-200 cursor-pointer font-body w-full group
+                        ${isSelected ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10' : 'border-[var(--color-border)] bg-[var(--color-surface-hover)] hover:border-white/30 hover:bg-white/5'}
+                      `}
+                    >
+                      <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: level.color }} />
+                      <div>
+                        <div className={`font-bold text-[15px] ${isSelected ? 'text-[var(--color-accent)]' : 'text-white group-hover:text-white'}`}>
+                          {level.label}
+                        </div>
+                        <div className="text-[12px] text-[var(--color-muted)] mt-0.5 leading-snug">
+                          {level.desc}
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+              
+              <button
+                onClick={() => setPendingArtist(null)}
+                className="mt-2 py-3 rounded-xl border border-[var(--color-border)] bg-transparent text-[var(--color-muted)] text-[13px] cursor-pointer font-body transition-all duration-200 hover:border-white/40 hover:text-white"
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

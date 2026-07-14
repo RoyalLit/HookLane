@@ -23,7 +23,6 @@ export default function QuizScreen() {
   const nextBtnRef = useRef(null)
   const backBtnRef = useRef(null)
 
-  // Reliable scroll-to-top when round changes (not just after next button)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'instant' : 'smooth' })
   }, [currentRound, shouldReduceMotion])
@@ -53,7 +52,7 @@ export default function QuizScreen() {
   }, [nextRound, shouldReduceMotion])
 
   const round = rounds[currentRound]
-  if (!round) return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>No round data</div>
+  if (!round) return <div className="text-white p-10 text-center">No round data</div>
 
   const { correctTrack, options } = round
 
@@ -67,93 +66,26 @@ export default function QuizScreen() {
   return (
     <div
       ref={containerRef}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        minHeight: '100dvh',
-        overflowY: 'auto',
-        padding: '16px 12px 48px',
-        gap: 12,
-        maxWidth: 480,
-        margin: '0 auto',
-        boxSizing: 'border-box',
-      }}
+      className="flex flex-col items-center min-h-[100dvh] overflow-y-auto pt-4 px-3 pb-12 gap-3 max-w-[480px] mx-auto box-border"
     >
-      {/* Header */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 2fr 1fr',
-        width: '100%',
-        alignItems: 'center',
-      }}>
+      <div className="grid grid-cols-[1fr_2fr_1fr] w-full items-center">
         <button
           ref={backBtnRef}
           onClick={() => setConfirmExit(true)}
           aria-label="Exit quiz"
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: '50%',
-            border: '1px solid var(--color-border)',
-            background: 'transparent',
-            color: 'var(--color-muted)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.2s',
-            outline: 'none',
-            justifySelf: 'start',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-accent)'
-            e.currentTarget.style.color = '#fff'
-            e.currentTarget.style.background = 'rgba(255,107,53,0.1)'
-            e.currentTarget.style.boxShadow = '0 0 20px rgba(255,107,53,0.25)'
-            e.currentTarget.style.transform = 'scale(1.1)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--color-border)'
-            e.currentTarget.style.color = 'var(--color-muted)'
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.boxShadow = 'none'
-            e.currentTarget.style.transform = 'scale(1)'
-          }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.transform = 'scale(0.9)'
-          }}
-          onMouseUp={(e) => {
-            e.currentTarget.style.transform = 'scale(1.1)'
-          }}
+          className="w-9 h-9 rounded-full border border-[var(--color-border)] bg-transparent text-[var(--color-muted)] cursor-pointer flex items-center justify-center transition-all duration-200 outline-none justify-self-start hover:border-[var(--color-accent)] hover:text-white hover:bg-[rgba(255,107,53,0.1)] hover:shadow-[0_0_20px_rgba(255,107,53,0.25)] hover:scale-110 active:scale-90"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5" />
             <path d="M12 19l-7-7 7-7" />
           </svg>
         </button>
-        <h1
-          style={{
-            color: '#fff',
-            fontSize: 16,
-            fontWeight: 700,
-            fontFamily: 'var(--font-body)',
-            margin: 0,
-            textAlign: 'center',
-          }}
-        >
+        <h1 className="text-white text-base font-bold font-body m-0 text-center truncate px-2">
           {selectedArtist?.name}
         </h1>
         <h2
           aria-live="polite"
-          style={{
-            color: 'var(--color-accent)',
-            fontSize: 15,
-            fontWeight: 700,
-            fontFamily: 'var(--font-mono)',
-            margin: 0,
-            textAlign: 'right',
-          }}
+          className="text-[var(--color-accent)] text-[15px] font-bold font-mono m-0 text-right"
         >
           {score}/{totalRounds}
         </h2>
@@ -168,12 +100,7 @@ export default function QuizScreen() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.2 }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 10,
-          }}
+          className="flex flex-col items-center gap-2.5"
         >
           <AlbumArt
             src={selectedArtist?.picture_big || selectedArtist?.picture_medium}
@@ -190,17 +117,10 @@ export default function QuizScreen() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Answer grid */}
       <div
         role="radiogroup"
         aria-label="Choose the correct song"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 10,
-          width: '100%',
-          maxWidth: 400,
-        }}
+        className="grid grid-cols-2 gap-2.5 w-full max-w-[400px]"
       >
         {options.map((opt, i) => (
           <AnswerCard
@@ -213,13 +133,8 @@ export default function QuizScreen() {
         ))}
       </div>
 
-      {/* Skip button */}
       {!answered && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: 8,
-        }}>
+        <div className="flex justify-center mt-2">
           <button
             onClick={() => {
               setAnswered(true)
@@ -227,44 +142,14 @@ export default function QuizScreen() {
               answerQuestion('skip')
             }}
             aria-label="Skip this round"
-            style={{
-              padding: '10px 24px',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--color-border)',
-              background: 'transparent',
-              color: 'var(--color-muted)',
-              fontSize: 12,
-              fontWeight: 600,
-              fontFamily: 'var(--font-body)',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-accent)'
-              e.currentTarget.style.color = '#fff'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--color-border)'
-              e.currentTarget.style.color = 'var(--color-muted)'
-            }}
+            className="px-6 py-2.5 rounded-md border border-[var(--color-border)] bg-transparent text-[var(--color-muted)] text-[12px] font-semibold font-body cursor-pointer transition-all duration-200 hover:border-[var(--color-accent)] hover:text-white"
           >
             I don't know — Skip
           </button>
         </div>
       )}
 
-      {/* Feedback + Next */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 12,
-          marginTop: 16,
-          minHeight: 84,
-          justifyContent: answered ? 'flex-start' : 'flex-end',
-        }}
-      >
+      <div className={`flex flex-col items-center gap-3 mt-4 min-h-[84px] w-full ${answered ? 'justify-start' : 'justify-end'}`}>
         {answered && (
           <AnimatePresence>
             <motion.div
@@ -274,15 +159,13 @@ export default function QuizScreen() {
               aria-live="polite"
             >
               {selectedId === correctTrack.id ? (
-                <span style={{ color: 'var(--color-correct)', fontWeight: 700, fontSize: 15 }}>
-                  ✓ Correct!
-                </span>
+                <span className="text-[var(--color-correct)] font-bold text-[15px]">✓ Correct!</span>
               ) : selectedId === 'skip' ? (
-                <span style={{ color: 'var(--color-muted)', fontWeight: 600, fontSize: 14 }}>
-                  ✗ {correctTrack.title} <span style={{fontSize: 11}}>(skipped)</span>
+                <span className="text-[var(--color-muted)] font-semibold text-[14px]">
+                  ✗ {correctTrack.title} <span className="text-[11px]">(skipped)</span>
                 </span>
               ) : (
-                <span style={{ color: 'var(--color-wrong)', fontWeight: 600, fontSize: 14 }}>
+                <span className="text-[var(--color-wrong)] font-semibold text-[14px]">
                   ✗ {correctTrack.title}
                 </span>
               )}
@@ -299,36 +182,7 @@ export default function QuizScreen() {
             <button
               ref={nextBtnRef}
               onClick={handleNext}
-              style={{
-                padding: '14px 36px',
-                borderRadius: 'var(--radius-md)',
-                background: 'var(--color-accent)',
-                color: '#fff',
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: '0.08em',
-                fontFamily: 'var(--font-body)',
-                border: 'none',
-                cursor: 'pointer',
-                minHeight: 48,
-                transition: 'all 0.2s',
-                boxShadow: '0 0 25px rgba(255,107,53,0.25)',
-                textTransform: 'uppercase',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 45px rgba(255,107,53,0.45)'
-                e.currentTarget.style.transform = 'scale(1.03)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 25px rgba(255,107,53,0.25)'
-                e.currentTarget.style.transform = 'scale(1)'
-              }}
-              onMouseDown={(e) => {
-                e.currentTarget.style.transform = 'scale(0.97)'
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.transform = 'scale(1.03)'
-              }}
+              className="px-9 py-3.5 rounded-md bg-[var(--color-accent)] text-white text-[13px] font-bold tracking-[0.08em] font-body uppercase border-none cursor-pointer min-h-[48px] shadow-[0_0_25px_rgba(255,107,53,0.25)] transition-all duration-200 hover:shadow-[0_0_45px_rgba(255,107,53,0.45)] hover:scale-[1.03] active:scale-[0.97]"
             >
               {currentRound + 1 >= totalRounds ? 'See Results' : 'Next'}
             </button>
@@ -336,7 +190,6 @@ export default function QuizScreen() {
         )}
       </div>
 
-      {/* Confirm exit modal */}
       <AnimatePresence>
         {confirmExit && (
           <motion.div
@@ -344,17 +197,7 @@ export default function QuizScreen() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 100,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'rgba(0,0,0,0.7)',
-              backdropFilter: 'blur(4px)',
-              padding: 20,
-            }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-5"
             onClick={() => setConfirmExit(false)}
           >
             <motion.div
@@ -363,72 +206,24 @@ export default function QuizScreen() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-lg)',
-                padding: 28,
-                maxWidth: 340,
-                width: '100%',
-                textAlign: 'center',
-                fontFamily: 'var(--font-body)',
-              }}
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-7 max-w-[340px] w-full text-center font-body"
             >
-              <p style={{ color: '#fff', fontSize: 16, fontWeight: 600, margin: '0 0 8px' }}>
+              <p className="text-white text-base font-semibold m-0 mb-2">
                 Exit quiz?
               </p>
-              <p style={{ color: 'var(--color-muted)', fontSize: 13, margin: '0 0 24px', lineHeight: 1.5 }}>
+              <p className="text-[var(--color-muted)] text-[13px] m-0 mb-6 leading-relaxed">
                 Your progress in this round will be lost.
               </p>
-              <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <div className="flex gap-2.5 justify-center">
                 <button
                   onClick={() => setConfirmExit(false)}
-                  style={{
-                    padding: '12px 24px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--color-border)',
-                    background: 'transparent',
-                    color: '#fff',
-                    fontSize: 13,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'var(--color-surface-hover)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent'
-                  }}
+                  className="px-6 py-3 rounded-md border border-[var(--color-border)] bg-transparent text-white text-[13px] font-semibold cursor-pointer transition-colors duration-200 font-body hover:bg-[var(--color-surface-hover)]"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => { setConfirmExit(false); exitQuiz() }}
-                  style={{
-                    padding: '12px 24px',
-                    borderRadius: 'var(--radius-md)',
-                    border: 'none',
-                    background: 'var(--color-accent)',
-                    color: '#fff',
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 0 25px rgba(255,107,53,0.4)'
-                    e.currentTarget.style.transform = 'scale(1.03)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = 'none'
-                    e.currentTarget.style.transform = 'scale(1)'
-                  }}
-                  onMouseDown={(e) => {
-                    e.currentTarget.style.transform = 'scale(0.97)'
-                  }}
+                  className="px-6 py-3 rounded-md border-none bg-[var(--color-accent)] text-white text-[13px] font-bold cursor-pointer transition-all duration-200 font-body hover:shadow-[0_0_25px_rgba(255,107,53,0.4)] hover:scale-[1.03] active:scale-[0.97]"
                 >
                   Exit
                 </button>
