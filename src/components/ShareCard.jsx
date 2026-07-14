@@ -50,9 +50,16 @@ function drawCircularImage(ctx, img, cx, cy, r) {
     ctx.fillRect(cx - r, cy - r, r * 2, r * 2)
   }
   ctx.restore()
+  // border
   ctx.beginPath()
   ctx.arc(cx, cy, r, 0, Math.PI * 2)
   ctx.strokeStyle = BORDER
+  ctx.lineWidth = 2
+  ctx.stroke()
+  // accent ring
+  ctx.beginPath()
+  ctx.arc(cx, cy, r + 3, 0, Math.PI * 2)
+  ctx.strokeStyle = ACCENT
   ctx.lineWidth = 2
   ctx.stroke()
 }
@@ -69,6 +76,13 @@ function drawAlbumCover(ctx, img, x, y, size) {
     ctx.fillRect(x, y, size, size)
   }
   ctx.restore()
+  // inner white border (2px)
+  ctx.beginPath()
+  roundRect(ctx, x + 1, y + 1, size - 2, size - 2, 13)
+  ctx.strokeStyle = 'rgba(255,255,255,1)'
+  ctx.lineWidth = 2
+  ctx.stroke()
+  // outer border
   ctx.beginPath()
   roundRect(ctx, x, y, size, size, 14)
   ctx.closePath()
@@ -109,8 +123,18 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       ctx.fillStyle = BG
       ctx.fillRect(0, 0, SIZE, SIZE)
 
-      // accent header bar
-      ctx.fillStyle = ACCENT
+      // radial gradient overlay
+      const gradient = ctx.createRadialGradient(SIZE / 2, SIZE / 2, 100, SIZE / 2, SIZE / 2, 600)
+      gradient.addColorStop(0, 'rgba(255, 107, 53, 0.03)')
+      gradient.addColorStop(1, 'transparent')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, SIZE, SIZE)
+
+      // accent header bar - gradient
+      const headerGradient = ctx.createLinearGradient(0, 0, SIZE, 0)
+      headerGradient.addColorStop(0, '#FF6B35')
+      headerGradient.addColorStop(1, '#FF8C5A')
+      ctx.fillStyle = headerGradient
       ctx.fillRect(0, 0, SIZE, 20)
 
       // load images
@@ -140,7 +164,7 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       const nameY = portraitCy + portraitR + 28
       ctx.fillText(artistName, SIZE / 2, nameY)
 
-      // score
+      // score: "7 / 10"
       const scoreY = nameY + 44 + 24
       const pct = totalRounds > 0 ? Math.round((score / totalRounds) * 100) : 0
 
@@ -225,12 +249,19 @@ const ShareCard = forwardRef(function ShareCard({ score, totalRounds, selectedAr
       ctx.fillStyle = '#FFFFFF'
       ctx.fillText(laneTxt, wmX + hookW, wmY)
 
+      // subtitle
+      ctx.font = '24px "JetBrains Mono", monospace'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'top'
+      ctx.fillStyle = '#A8A6AC'
+      ctx.fillText('Instant Music Quiz', SIZE / 2, wmY + 52)
+
       // site URL
       ctx.font = '22px "JetBrains Mono", monospace'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'top'
       ctx.fillStyle = MUTED
-      ctx.fillText('hooklane.vercel.app', SIZE / 2, wmY + 52)
+      ctx.fillText('hooklane.vercel.app', SIZE / 2, wmY + 86)
 
       // generate blob
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))

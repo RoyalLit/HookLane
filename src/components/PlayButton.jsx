@@ -15,21 +15,6 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
   const previewDuration = clipDuration ? clipDuration * 1000 : DEFAULT_PREVIEW_DURATION
   const isMaxed = maxPlays !== Infinity && playCount >= maxPlays
 
-  useEffect(() => {
-    setPlaying(false)
-    setAudioFailed(false)
-    setHasPlayed(false)
-    setLoading(false)
-    setPlayCount(0)
-
-    if (autoPlay && previewUrl) {
-      const t = setTimeout(() => {
-        playAudio()
-      }, 400)
-      return () => clearTimeout(t)
-    }
-  }, [previewUrl, autoPlay, playAudio])
-
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current)
@@ -48,10 +33,6 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
     audioRef.current.load()
     audioRef.current = null
   }, [clearTimer])
-
-  useEffect(() => {
-    return stopAudio
-  }, [stopAudio])
 
   const initAudio = useCallback(() => {
     if (audioRef.current) {
@@ -99,6 +80,25 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
       }, previewDuration)
     }).catch(() => { setPlaying(false); setLoading(false) })
   }, [previewUrl, isMaxed, previewDuration, initAudio, clearTimer, stopAudio])
+
+  useEffect(() => {
+    setPlaying(false)
+    setAudioFailed(false)
+    setHasPlayed(false)
+    setLoading(false)
+    setPlayCount(0)
+
+    if (autoPlay && previewUrl) {
+      const t = setTimeout(() => {
+        playAudio()
+      }, 400)
+      return () => clearTimeout(t)
+    }
+  }, [previewUrl, autoPlay, playAudio])
+
+  useEffect(() => {
+    return stopAudio
+  }, [stopAudio])
 
   function toggle() {
     if (!previewUrl) return
@@ -206,17 +206,34 @@ export default function PlayButton({ previewUrl, autoPlay, maxPlays = Infinity, 
             </>
           )}
           {loading ? (
-            <LoadingIcon />
+            <svg className="animate-spin" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="31.4 31.4" strokeLinecap="round" />
+            </svg>
           ) : audioFailed ? (
-            <FailedIcon />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
           ) : isMaxed ? (
-            <LockedIcon />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
           ) : hasPlayed ? (
-            <ReplayIcon />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20" aria-hidden="true">
+              <path d="M21 12a9 9 0 1 1-9-9" />
+              <path d="M21 3v5h-5" />
+            </svg>
           ) : playing ? (
-            <PauseIcon />
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
           ) : (
-            <PlayIcon />
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
           )}
         </button>
 
