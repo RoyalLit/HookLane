@@ -296,7 +296,8 @@ export default function ScoreScreen() {
                   behindGlowEnabled={false}
                   innerGradient="linear-gradient(145deg, #2a1a0e 0%, #FF6B3544 100%)"
                   miniAvatarUrl={avatarUrl}
-                  showUserInfo={false}
+                  showUserInfo={true}
+                  hideContactButton={true}
                   branding={true}
                 />
             </motion.div>
@@ -307,7 +308,7 @@ export default function ScoreScreen() {
               exit={{ opacity: 0, y: 10 }}
               transition={{ delay: 0.3, duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
-              className="flex gap-3 shrink-0"
+              className="flex flex-wrap justify-center gap-2 sm:gap-3 shrink-0 max-w-[340px] w-full"
             >
               <ShareButton label="WhatsApp" color="#25D366" onClick={handleWhatsApp}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">

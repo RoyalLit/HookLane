@@ -59,7 +59,7 @@ export default function AnswerCard({ track, state, onSelect, index }) {
         )}
       </div>
       <span
-        className={`text-[13px] font-semibold text-center leading-[1.2] break-words ${isCorrect ? 'text-[var(--color-correct)]' : isWrong ? 'text-[var(--color-wrong)]' : 'text-white'}`}
+        className={`text-[12px] sm:text-[13px] font-semibold text-center leading-[1.2] break-words line-clamp-2 min-h-[29px] sm:min-h-[31px] ${isCorrect ? 'text-[var(--color-correct)]' : isWrong ? 'text-[var(--color-wrong)]' : 'text-white'}`}
       >
         {track.title}
       </span>

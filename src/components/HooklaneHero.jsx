@@ -360,7 +360,7 @@ export default function HooklaneHero({ onSelectArtist }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '16px 24px',
+          padding: 'clamp(12px, 3vw, 24px)',
         }}
       >
         <span style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}>
@@ -461,7 +461,7 @@ export default function HooklaneHero({ onSelectArtist }) {
                 background: 'rgba(26,26,30,0.6)',
                 border: '1px solid var(--color-border)',
                 borderRadius: 'var(--radius-xl)',
-                padding: '14px 18px',
+                padding: '12px 16px',
                 transition: 'border-color 0.2s, box-shadow 0.2s',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',

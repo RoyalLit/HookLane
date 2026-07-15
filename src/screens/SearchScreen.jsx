@@ -140,38 +140,38 @@ export default function SearchScreen() {
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[360px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[24px] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-6 text-center relative overflow-hidden"
+              className="w-full max-w-[420px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-8 text-center relative overflow-hidden"
             >
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[200px] h-[100px] bg-[var(--color-accent)] opacity-20 blur-[50px] pointer-events-none" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[240px] h-[120px] bg-[var(--color-accent)] opacity-20 blur-[60px] pointer-events-none" />
 
-              <div className="flex flex-col items-center gap-3 relative z-10">
+              <div className="flex flex-col items-center gap-4 relative z-10 mt-2">
                 {pendingArtist.picture_medium ? (
                   <img 
                     src={pendingArtist.picture_medium} 
                     alt={pendingArtist.name}
-                    className="w-20 h-20 rounded-full border-2 border-white/10 object-cover shadow-xl"
+                    className="w-24 h-24 rounded-full border-[3px] border-white/10 object-cover shadow-xl"
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-full border-2 border-white/10 bg-white/5 flex items-center justify-center shadow-xl">
-                    <span className="text-white/50 text-2xl font-bold">?</span>
+                  <div className="w-24 h-24 rounded-full border-[3px] border-white/10 bg-white/5 flex items-center justify-center shadow-xl">
+                    <span className="text-white/50 text-3xl font-bold">?</span>
                   </div>
                 )}
-                <div>
-                  <h2 className="text-white text-[24px] font-extrabold m-0 font-display truncate px-2">
+                <div className="px-2">
+                  <h2 className="text-white text-[28px] font-extrabold m-0 font-display truncate">
                     {pendingArtist.name}
                   </h2>
-                  <p className="text-[var(--color-muted)] text-[14px] m-0 mt-1 font-body">Choose difficulty</p>
+                  <p className="text-[var(--color-muted)] text-[15px] m-0 mt-1.5 font-body">Choose difficulty</p>
                 </div>
               </div>
               
-              <div role="radiogroup" aria-label="Choose difficulty" className="flex flex-col gap-3 w-full relative z-10">
+              <div role="radiogroup" aria-label="Choose difficulty" className="flex flex-col gap-2.5 sm:gap-3.5 w-full relative z-10 mb-2">
                 {LEVELS.map((level) => {
                   const isSelected = difficulty === level.id
                   return (
                     <button
                       key={level.id}
                       onClick={() => handleSelectArtist(pendingArtist, level.id)}
-                      className={`relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
+                      className={`relative overflow-hidden flex items-center gap-3 sm:gap-4 px-4 py-3 sm:px-5 sm:py-4 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
                         ${isSelected ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_20px_rgba(255,107,53,0.15)]' : 'border-white/5 bg-white/5 hover:border-white/20 hover:bg-white/10'}
                       `}
                     >

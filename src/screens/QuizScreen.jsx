@@ -68,7 +68,7 @@ export default function QuizScreen() {
       ref={containerRef}
       className="flex flex-col items-center min-h-[100dvh] w-full max-w-[480px] mx-auto pt-4 px-4 pb-12 gap-4 box-border"
     >
-      <div className="grid grid-cols-[1fr_2fr_1fr] w-full items-center">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-3 w-full items-center">
         <button
           ref={backBtnRef}
           onClick={() => setConfirmExit(true)}
@@ -142,7 +142,7 @@ export default function QuizScreen() {
               answerQuestion('skip')
             }}
             aria-label="Skip this round"
-            className="px-6 py-2.5 rounded-md border border-[var(--color-border)] bg-transparent text-[var(--color-muted)] text-[12px] font-semibold font-body cursor-pointer transition-all duration-200 hover:border-[var(--color-accent)] hover:text-white"
+            className="px-4 py-2 sm:px-6 sm:py-2.5 rounded-md border border-[var(--color-border)] bg-transparent text-[var(--color-muted)] text-[12px] font-semibold font-body cursor-pointer transition-all duration-200 hover:border-[var(--color-accent)] hover:text-white"
           >
             I don't know — Skip
           </button>
@@ -182,7 +182,7 @@ export default function QuizScreen() {
             <button
               ref={nextBtnRef}
               onClick={handleNext}
-              className="px-9 py-3.5 rounded-md bg-[var(--color-accent)] text-white text-[13px] font-bold tracking-[0.08em] font-body uppercase border-none cursor-pointer min-h-[48px] shadow-[0_0_25px_rgba(255,107,53,0.25)] transition-all duration-200 hover:shadow-[0_0_45px_rgba(255,107,53,0.45)] hover:scale-[1.03] active:scale-[0.97]"
+              className="px-6 py-3 sm:px-9 sm:py-3.5 rounded-md bg-[var(--color-accent)] text-white text-[13px] font-bold tracking-[0.08em] font-body uppercase border-none cursor-pointer min-h-[48px] shadow-[0_0_25px_rgba(255,107,53,0.25)] transition-all duration-200 hover:shadow-[0_0_45px_rgba(255,107,53,0.45)] hover:scale-[1.03] active:scale-[0.97]"
             >
               {currentRound + 1 >= totalRounds ? 'See Results' : 'Next'}
             </button>

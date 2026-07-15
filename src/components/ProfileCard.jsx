@@ -35,6 +35,7 @@ const ProfileCardComponent = ({
   contactText = 'Contact',
   showUserInfo = true,
   branding = false,
+  hideContactButton = false,
   onContactClick
 }) => {
   const wrapRef = useRef(null);
@@ -344,15 +345,17 @@ const ProfileCardComponent = ({
                       <div className="pc-status">{status}</div>
                     </div>
                   </div>
-                  <button
-                    className="pc-contact-btn"
-                    onClick={handleContactClick}
-                    style={{ pointerEvents: 'auto' }}
-                    type="button"
-                    aria-label={`Contact ${name || 'user'}`}
-                  >
-                    {contactText}
-                  </button>
+                  {!hideContactButton && (
+                    <button
+                      className="pc-contact-btn"
+                      onClick={handleContactClick}
+                      style={{ pointerEvents: 'auto' }}
+                      type="button"
+                      aria-label={`Contact ${name || 'user'}`}
+                    >
+                      {contactText}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
