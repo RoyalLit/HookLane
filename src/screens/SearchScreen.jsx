@@ -140,7 +140,7 @@ export default function SearchScreen() {
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[480px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-8 text-center relative overflow-hidden"
+              className="w-full max-w-[520px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 sm:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-10 text-center relative overflow-hidden"
             >
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[240px] h-[120px] bg-[var(--color-accent)] opacity-20 blur-[60px] pointer-events-none" />
 
@@ -164,14 +164,14 @@ export default function SearchScreen() {
                 </div>
               </div>
               
-              <div role="radiogroup" aria-label="Choose difficulty" className="flex flex-col gap-2.5 sm:gap-3.5 w-full relative z-10 mb-2">
+              <div role="radiogroup" aria-label="Choose difficulty" className="flex flex-col gap-3.5 sm:gap-4 w-full relative z-10 mb-2">
                 {LEVELS.map((level) => {
                   const isSelected = difficulty === level.id
                   return (
                     <button
                       key={level.id}
                       onClick={() => handleSelectArtist(pendingArtist, level.id)}
-                      className={`relative overflow-hidden flex items-center gap-3 sm:gap-4 px-5 py-3 sm:px-6 sm:py-4 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
+                      className={`relative overflow-hidden flex items-center gap-4 sm:gap-5 px-6 py-4 sm:px-7 sm:py-5 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
                         ${isSelected ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_20px_rgba(255,107,53,0.15)]' : 'border-white/5 bg-white/5 hover:border-white/20 hover:bg-white/10'}
                       `}
                     >
@@ -194,7 +194,7 @@ export default function SearchScreen() {
                             {level.desc}
                           </div>
                         </div>
-                        <div className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-300 ${isSelected ? 'bg-[var(--color-accent)] text-white translate-x-0 opacity-100' : 'bg-white/10 text-white/50 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}`}>
+                        <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full transition-all duration-300 ${isSelected ? 'bg-[var(--color-accent)] text-white translate-x-0 opacity-100' : 'bg-white/10 text-white/50 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}`}>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                           </svg>

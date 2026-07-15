@@ -206,24 +206,24 @@ export default function QuizScreen() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ duration: 0.15 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-7 max-w-[340px] w-full text-center font-body"
+              className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-8 max-w-[420px] w-full text-center font-body"
             >
               <p className="text-white text-base font-semibold m-0 mb-2">
                 Exit quiz?
               </p>
-              <p className="text-[var(--color-muted)] text-[13px] m-0 mb-6 leading-relaxed">
+              <p className="text-[var(--color-muted)] text-[14px] m-0 mb-8 leading-relaxed">
                 Your progress in this round will be lost.
               </p>
-              <div className="flex gap-2.5 justify-center">
+              <div className="flex gap-4 justify-center">
                 <button
                   onClick={() => setConfirmExit(false)}
-                  className="px-6 py-3 rounded-md border border-[var(--color-border)] bg-transparent text-white text-[13px] font-semibold cursor-pointer transition-colors duration-200 font-body hover:bg-[var(--color-surface-hover)]"
+                  className="min-w-[120px] px-6 py-3.5 rounded-md border border-[var(--color-border)] bg-transparent text-white text-[13px] font-semibold cursor-pointer transition-colors duration-200 font-body hover:bg-[var(--color-surface-hover)]"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => { setConfirmExit(false); exitQuiz() }}
-                  className="px-6 py-3 rounded-md border-none bg-[var(--color-accent)] text-white text-[13px] font-bold cursor-pointer transition-all duration-200 font-body hover:shadow-[0_0_25px_rgba(255,107,53,0.4)] hover:scale-[1.03] active:scale-[0.97]"
+                  className="min-w-[120px] px-6 py-3.5 rounded-md border-none bg-[var(--color-accent)] text-white text-[13px] font-bold cursor-pointer transition-all duration-200 font-body hover:shadow-[0_0_25px_rgba(255,107,53,0.4)] hover:scale-[1.03] active:scale-[0.97]"
                 >
                   Exit
                 </button>
