@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import useStore from './store'
 import SearchScreen from './screens/SearchScreen'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -41,12 +42,19 @@ export default function App() {
     <>
       <a href="#main-content" className="skip-link">Skip to content</a>
       <ErrorToast message={toastMessage} onDismiss={clearToast} />
-      <main
-        id="main-content"
-        style={{ animation: 'fadeIn 0.25s ease-out' }}
-      >
-        {renderScreen()}
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={screen}
+          id="main-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full"
+        >
+          {renderScreen()}
+        </motion.main>
+      </AnimatePresence>
     </>
   )
 }

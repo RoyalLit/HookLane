@@ -173,7 +173,7 @@ export default function ScoreScreen() {
   const avatarUrl = selectedArtist?.picture_big || selectedArtist?.picture_medium
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-[clamp(24px,5vw,48px)] gap-5 text-center relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-[clamp(24px,5vw,48px)] gap-5 text-center relative w-full max-w-[480px] mx-auto overflow-x-hidden">
       {isPerfect && !shouldReduceMotion && (
         <div aria-hidden="true" className="fixed inset-0 pointer-events-none overflow-hidden z-50">
           {confettiPieces.current.map((p) => (
@@ -201,7 +201,7 @@ export default function ScoreScreen() {
         <ProfileCard
           avatarUrl={avatarUrl}
           name={
-            <span className="flex items-center justify-center gap-1">
+            <span className="flex items-center justify-center gap-1" style={{ WebkitTextFillColor: 'initial' }}>
               <CountUp to={score} _duration={1.5} className="font-bold font-mono text-[var(--color-accent)]" /> 
               <span className="text-white">/ {totalRounds}</span>
             </span>

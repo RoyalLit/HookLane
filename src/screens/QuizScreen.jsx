@@ -66,7 +66,7 @@ export default function QuizScreen() {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col items-center min-h-[100dvh] overflow-y-auto pt-4 px-3 pb-12 gap-3 max-w-[480px] mx-auto box-border"
+      className="flex flex-col items-center min-h-[100dvh] w-full max-w-[480px] mx-auto pt-4 px-4 pb-12 gap-4 box-border"
     >
       <div className="grid grid-cols-[1fr_2fr_1fr] w-full items-center">
         <button

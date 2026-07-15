@@ -92,7 +92,8 @@
   z-index: 1;
 }
 
-.pc-card * {
+.pc-card > *,
+.pc-inside > * {
   display: grid;
   grid-area: 1/-1;
   border-radius: var(--card-radius);
