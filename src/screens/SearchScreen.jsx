@@ -91,7 +91,7 @@ export default function SearchScreen() {
   ]
 
   return (
-    <div className="relative w-full overflow-x-hidden">
+    <div className="relative w-full">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 opacity-50" style={{
           maskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
@@ -140,7 +140,7 @@ export default function SearchScreen() {
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-[420px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-8 text-center relative overflow-hidden"
+              className="w-full max-w-[480px] bg-black/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col gap-8 text-center relative overflow-hidden"
             >
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[240px] h-[120px] bg-[var(--color-accent)] opacity-20 blur-[60px] pointer-events-none" />
 
@@ -171,7 +171,7 @@ export default function SearchScreen() {
                     <button
                       key={level.id}
                       onClick={() => handleSelectArtist(pendingArtist, level.id)}
-                      className={`relative overflow-hidden flex items-center gap-3 sm:gap-4 px-4 py-3 sm:px-5 sm:py-4 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
+                      className={`relative overflow-hidden flex items-center gap-3 sm:gap-4 px-5 py-3 sm:px-6 sm:py-4 rounded-[16px] border text-left transition-all duration-300 cursor-pointer font-body w-full group outline-none
                         ${isSelected ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_20px_rgba(255,107,53,0.15)]' : 'border-white/5 bg-white/5 hover:border-white/20 hover:bg-white/10'}
                       `}
                     >

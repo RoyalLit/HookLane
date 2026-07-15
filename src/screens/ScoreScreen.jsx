@@ -173,7 +173,7 @@ export default function ScoreScreen() {
   const avatarUrl = selectedArtist?.picture_big || selectedArtist?.picture_medium
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-[clamp(24px,5vw,48px)] gap-5 text-center relative w-full max-w-[480px] mx-auto overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-[clamp(24px,5vw,48px)] gap-5 text-center relative w-full max-w-[560px] mx-auto">
       {isPerfect && !shouldReduceMotion && (
         <div aria-hidden="true" className="fixed inset-0 pointer-events-none overflow-hidden z-50">
           {confettiPieces.current.map((p) => (

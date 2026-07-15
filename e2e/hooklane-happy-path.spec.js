@@ -33,7 +33,7 @@ test('Hooklane happy path: select artist, answer question, finish quiz', async (
     await skipButton.click();
 
     // Click next
-    const nextButton = page.locator('button').filter({ hasText: /Next|See Results/ });
+    const nextButton = page.locator('button', { hasText: /^Next$|^See Results$/ });
     await expect(nextButton).toBeVisible();
     await nextButton.click();
   }
